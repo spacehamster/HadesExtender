@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <RootNamespace>HadesExtender</RootNamespace>
+        <TargetFramework>net471</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="EasyHook" Version="2.7.7097" />
+    </ItemGroup>
+    
+    <Import Project="../Dia2Lib/Dia2Lib.props" />
+</Project>

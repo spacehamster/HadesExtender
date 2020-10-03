@@ -1,0 +1,58 @@
+﻿using System;
+
+namespace HadesExtender
+{
+    public sealed class UnresolvedSymbolException : Exception
+    {
+        const string DefaultMessage = "Symbol has not been resolved.";
+
+        public string SymbolName { get; }
+
+        public UnresolvedSymbolException()
+            : base(DefaultMessage)
+        {
+        }
+
+        public UnresolvedSymbolException(Exception inner)
+            : base(DefaultMessage, inner)
+        {
+        }
+
+        public UnresolvedSymbolException(string symbol)
+            : base(DefaultMessage)
+        {
+            SymbolName = symbol;
+        }
+
+        public UnresolvedSymbolException(string symbol, Exception inner)
+            : base(DefaultMessage, inner)
+        {
+            SymbolName = symbol;
+        }
+
+        public UnresolvedSymbolException(string symbol, string message)
+            : base(message)
+        {
+            SymbolName = symbol;
+        }
+
+        public UnresolvedSymbolException(string symbol, string message, Exception inner)
+            : base(message, inner)
+        {
+            SymbolName = symbol;
+        }
+
+        public override string Message
+        {
+            get
+            {
+                var message = base.Message;
+
+                if (!string.IsNullOrEmpty(message) && !string.IsNullOrEmpty(SymbolName))
+                    message += $" ({SymbolName})";
+
+                return message;
+            }
+        }
+    }
+}
