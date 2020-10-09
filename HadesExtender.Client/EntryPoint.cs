@@ -26,6 +26,8 @@ namespace HadesExtender
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         delegate void InitLuaDelegate();
 
+        ScriptManager scriptManager;
+
         [SuppressMessage("Style", "IDE0060", Justification = "Required by EasyHook")]
         public EntryPoint(RemoteHooking.IContext context, string channelName)
         {
@@ -107,35 +109,47 @@ namespace HadesExtender
                 result = method.Invoke(filePath);
             }
 
-            Console.WriteLine($"LoadLibraryHook called: {filePath}");
-            module = GetEngineModule();
-            resolver = new DiaSymbolResolver(module);
-
+            try
             {
-                var address = resolver.Resolve("?InitLua@ScriptManager@sgg@@SAXXZ");
-                var hook = LocalHook.Create(address, new InitLuaDelegate(InitLua), null);
-                hook.ThreadACL.SetExclusiveACL(Array.Empty<int>());
-                Console.WriteLine($"Hooked InitLua");
-            }
-            {
-                var address = resolver.Resolve("?Update@ScreenManager@sgg@@QEAAXM@Z");
-                var hook = LocalHook.Create(address, new ScreenManagerUpdateDelegate(ScreenManagerUpdate), null);
-                hook.ThreadACL.SetExclusiveACL(Array.Empty<int>());
-                Console.WriteLine($"Hooked ScreenManager");
-            }
+                Console.WriteLine($"LoadLibraryHook called: {filePath}");
+                module = GetEngineModule();
+                resolver = new DiaSymbolResolver(module);
 
+                {
+                    var address = resolver.Resolve("?InitLua@ScriptManager@sgg@@SAXXZ");
+                    var hook = LocalHook.Create(address, new InitLuaDelegate(InitLua), null);
+                    hook.ThreadACL.SetExclusiveACL(Array.Empty<int>());
+                    Console.WriteLine($"Hooked InitLua");
+                }
+                {
+                    var address = resolver.Resolve("?Update@ScreenManager@sgg@@QEAAXM@Z");
+                    var hook = LocalHook.Create(address, new ScreenManagerUpdateDelegate(ScreenManagerUpdate), null);
+                    hook.ThreadACL.SetExclusiveACL(Array.Empty<int>());
+                    Console.WriteLine($"Hooked ScreenManager");
+                }
+
+                scriptManager = new ScriptManager(resolver);
+            } catch(Exception ex)
+            {
+                Console.Error.WriteLine(ex.ToString());
+            }
             return result;
         }
 
         private void InitLua()
         {
-            using (HookRuntimeInfo.Handle)
+            var bypass = HookRuntimeInfo.Handle.HookBypassAddress;
+            var method = Marshal.GetDelegateForFunctionPointer<InitLuaDelegate>(bypass);
+            method.Invoke();
+
+            try
             {
-                var bypass = HookRuntimeInfo.Handle.HookBypassAddress;
-                var method = Marshal.GetDelegateForFunctionPointer<InitLuaDelegate>(bypass);
-                method.Invoke();
+                Console.WriteLine($"InitLua called");
+                scriptManager.Init();
+            } catch(Exception ex)
+            {
+                Console.Error.WriteLine(ex.ToString());
             }
-            Console.WriteLine($"InitLua called");
         }
 
         private void ScreenManagerUpdate(IntPtr screenManager, float delta)
@@ -145,7 +159,7 @@ namespace HadesExtender
             var method = Marshal.GetDelegateForFunctionPointer<ScreenManagerUpdateDelegate>(bypass);
             method.Invoke(screenManager, delta);
 
-            Console.WriteLine($"ScreenManagerUpdate: {delta}");
+            //Console.WriteLine($"ScreenManagerUpdate: {delta}");
         }
     }
 }
