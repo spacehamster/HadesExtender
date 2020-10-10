@@ -15,10 +15,17 @@ namespace HadesExtender
 
         static DiaSymbolResolver resolver;
 
-        static event Action OnEngineInitialized;
-
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         delegate IntPtr LoadLibraryADelegate(string fileName);
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        delegate IntPtr StartAppDelegate(uint param);
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        delegate IntPtr InitWindowDelegate();
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        delegate void AppMainDelegate(int argc, IntPtr argv, IntPtr app);
 
         [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
         delegate void ScreenManagerUpdateDelegate(IntPtr screenManager, float delta);
@@ -35,7 +42,11 @@ namespace HadesExtender
             Console.SetIn(server.In);
             Console.SetOut(new TextWriterWrapper(server.Out));
             Console.SetError(new TextWriterWrapper(server.Error));
+        }
 
+        [SuppressMessage("Style", "IDE0060", Justification = "Required by EasyHook")]
+        public void Run(RemoteHooking.IContext context, string channelName)
+        {
             try
             {
                 foreach (ProcessModule module in Process.GetCurrentProcess().Modules)
@@ -44,23 +55,23 @@ namespace HadesExtender
                 }
                 Console.WriteLine();
 
-            }
-            catch (Exception ex)
-            {
-                Console.Error.WriteLine(ex);
-                throw;
-            }
-        }
-
-        [SuppressMessage("Style", "IDE0060", Justification = "Required by EasyHook")]
-        public void Run(RemoteHooking.IContext context, string channelName)
-        {
-            try
-            {
                 var kernel = GetKernelModule().BaseAddress;
                 var loadLibraryAFunc = Kernel32.GetProcAddress(kernel, "LoadLibraryA");
                 var hook = LocalHook.Create(loadLibraryAFunc, new LoadLibraryADelegate(LoadLibraryHook), null);
                 hook.ThreadACL.SetExclusiveACL(Array.Empty<int>());
+
+                Kernel32.LoadLibrary("EngineWin64s.dll");
+                module = GetEngineModule();
+                resolver = new DiaSymbolResolver(module);
+
+                Hook<InitLuaDelegate>("?InitLua@ScriptManager@sgg@@SAXXZ", InitLua);
+                Hook<ScreenManagerUpdateDelegate>("?Update@ScreenManager@sgg@@QEAAXM@Z", ScreenManagerUpdate);
+                Hook<StartAppDelegate>("StartApp", StartApp);
+                Hook<InitWindowDelegate>("InitWindow", InitWindow);
+                Hook<AppMainDelegate>("AppMain", AppMain);
+
+                scriptManager = new ScriptManager(resolver);
+                Console.WriteLine($"Created ScriptManager");
 
                 RemoteHooking.WakeUpProcess();
 
@@ -75,6 +86,14 @@ namespace HadesExtender
                 Console.Error.WriteLine(ex);
                 throw;
             }
+        }
+
+        static void Hook<T>(string name, T callback) where T : Delegate
+        {
+            var address = resolver.Resolve(name);
+            var hook = LocalHook.Create(address, callback, null);
+            hook.ThreadACL.SetExclusiveACL(Array.Empty<int>());
+            Console.WriteLine($"Hooked {name}");
         }
 
         ProcessModule GetEngineModule()
@@ -102,49 +121,27 @@ namespace HadesExtender
         private IntPtr LoadLibraryHook(string filePath)
         {
             IntPtr result;
-            using (HookRuntimeInfo.Handle)
-            {
-                var bypass = HookRuntimeInfo.Handle.HookBypassAddress;
-                var method = Marshal.GetDelegateForFunctionPointer<LoadLibraryADelegate>(bypass);
-                result = method.Invoke(filePath);
-            }
 
-            try
-            {
-                Console.WriteLine($"LoadLibraryHook called: {filePath}");
-                module = GetEngineModule();
-                resolver = new DiaSymbolResolver(module);
+            var bypass = HookRuntimeInfo.Handle.HookBypassAddress;
+            var method = Marshal.GetDelegateForFunctionPointer<LoadLibraryADelegate>(bypass);
+            result = method.Invoke(filePath);
 
-                {
-                    var address = resolver.Resolve("?InitLua@ScriptManager@sgg@@SAXXZ");
-                    var hook = LocalHook.Create(address, new InitLuaDelegate(InitLua), null);
-                    hook.ThreadACL.SetExclusiveACL(Array.Empty<int>());
-                    Console.WriteLine($"Hooked InitLua");
-                }
-                {
-                    var address = resolver.Resolve("?Update@ScreenManager@sgg@@QEAAXM@Z");
-                    var hook = LocalHook.Create(address, new ScreenManagerUpdateDelegate(ScreenManagerUpdate), null);
-                    hook.ThreadACL.SetExclusiveACL(Array.Empty<int>());
-                    Console.WriteLine($"Hooked ScreenManager");
-                }
+            Console.WriteLine($"LoadLibraryHook called: {filePath}");
 
-                scriptManager = new ScriptManager(resolver);
-            } catch(Exception ex)
-            {
-                Console.Error.WriteLine(ex.ToString());
-            }
             return result;
         }
 
         private void InitLua()
         {
-            var bypass = HookRuntimeInfo.Handle.HookBypassAddress;
-            var method = Marshal.GetDelegateForFunctionPointer<InitLuaDelegate>(bypass);
-            method.Invoke();
-
             try
             {
-                Console.WriteLine($"InitLua called");
+                Console.WriteLine($"InitLua called1");
+
+                var bypass = HookRuntimeInfo.Handle.HookBypassAddress;
+                var method = Marshal.GetDelegateForFunctionPointer<InitLuaDelegate>(bypass);
+                method.Invoke();
+
+                Console.WriteLine($"InitLua called2");
                 scriptManager.Init();
             } catch(Exception ex)
             {
@@ -152,14 +149,53 @@ namespace HadesExtender
             }
         }
 
+        int ScreenManagerUpdateCount = 0;
         private void ScreenManagerUpdate(IntPtr screenManager, float delta)
         {
 
             var bypass = HookRuntimeInfo.Handle.HookBypassAddress;
             var method = Marshal.GetDelegateForFunctionPointer<ScreenManagerUpdateDelegate>(bypass);
             method.Invoke(screenManager, delta);
+            if (ScreenManagerUpdateCount < 10)
+            {
+                Console.WriteLine($"ScreenManagerUpdate: {delta}");
+            }
+        }
 
-            //Console.WriteLine($"ScreenManagerUpdate: {delta}");
+        private IntPtr StartApp(uint param)
+        {
+            Console.WriteLine($"StartApp Start {param}");
+
+            var bypass = HookRuntimeInfo.Handle.HookBypassAddress;
+            var method = Marshal.GetDelegateForFunctionPointer<StartAppDelegate>(bypass);
+            var result = method.Invoke(param);
+
+            Console.WriteLine($"StartApp End");
+
+            return result;
+        }
+
+        private IntPtr InitWindow()
+        {
+            Console.WriteLine($"InitWindow Start");
+            var bypass = HookRuntimeInfo.Handle.HookBypassAddress;
+            var method = Marshal.GetDelegateForFunctionPointer<InitWindowDelegate>(bypass);
+            var result = method.Invoke();
+
+            Console.WriteLine($"InitWindow End");
+
+            return result;
+        }
+
+        private void AppMain(int argc, IntPtr argv, IntPtr app)
+        {
+            Console.WriteLine($"AppMain End");
+
+            var bypass = HookRuntimeInfo.Handle.HookBypassAddress;
+            var method = Marshal.GetDelegateForFunctionPointer<AppMainDelegate>(bypass);
+            method.Invoke(argc, argv, app);
+
+            Console.WriteLine($"AppMain End");
         }
     }
 }
