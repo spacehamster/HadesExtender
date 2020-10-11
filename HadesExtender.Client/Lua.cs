@@ -9,48 +9,47 @@ namespace HadesExtender
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         delegate int LuaGetTopDelegate(IntPtr luaState);
-        static LuaGetTopDelegate s_LuaGetTop;
+        [PdbSymbol]
+        static LuaGetTopDelegate lua_gettop = null;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         delegate void LuaSetTopDelegate(IntPtr luaState, int param);
-        static LuaSetTopDelegate s_LuaSetTop;
+        [PdbSymbol]
+        static LuaSetTopDelegate lua_settop = null;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         delegate void LuaPushLightUserDataDelegate(IntPtr luaState, IntPtr param);
-        static LuaPushLightUserDataDelegate s_LuaPushLightUserData;
+        [PdbSymbol]
+        static LuaPushLightUserDataDelegate lua_pushlightuserdata = null;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         delegate void LuaPushCClosureDelegate(IntPtr luaState, IntPtr func, int parameterCount);
-        static LuaPushCClosureDelegate s_LuaPushCClosure;
+        [PdbSymbol]
+        static LuaPushCClosureDelegate lua_pushcclosure = null;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         delegate void LusSetGlobalDelegate(IntPtr luaState, [MarshalAs(UnmanagedType.LPStr)] string param);
-        static LusSetGlobalDelegate s_LuaSetGlobal;
+        [PdbSymbol]
+        static LusSetGlobalDelegate lua_setglobal = null;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         delegate void LuaPushNumberDelegate(IntPtr luaState, double param);
-        static LuaPushNumberDelegate s_LuaPushNumber;
+        [PdbSymbol]
+        static LuaPushNumberDelegate lua_pushnumber = null;
 
         public Lua(SymbolResolver resolver, LuaInterface* luaState)
         {
             LuaState = luaState;
-
-            s_LuaGetTop = resolver.ResolveFunction<LuaGetTopDelegate>("lua_gettop");
-            s_LuaSetTop = resolver.ResolveFunction<LuaSetTopDelegate>("lua_settop");
-            s_LuaPushLightUserData = resolver.ResolveFunction<LuaPushLightUserDataDelegate>("lua_pushlightuserdata");
-            s_LuaPushCClosure = resolver.ResolveFunction<LuaPushCClosureDelegate>("lua_pushcclosure");
-            s_LuaSetGlobal = resolver.ResolveFunction<LusSetGlobalDelegate>("lua_setglobal");
-            s_LuaPushNumber = resolver.ResolveFunction<LuaPushNumberDelegate>("lua_pushnumber");
         }
 
         public void RegisterFunction<T>(string name, T method) where T : Delegate
         {
             if (LuaState == null || LuaState->state == IntPtr.Zero) throw new Exception("LuaState is null");
-            var newTop = s_LuaGetTop(LuaState->state);
+            var newTop = lua_gettop(LuaState->state);
             var pointer = Marshal.GetFunctionPointerForDelegate(method);
-            s_LuaPushCClosure(LuaState->state, pointer, 0);
-            s_LuaSetGlobal(LuaState->state, name);
-            s_LuaSetTop(LuaState->state, newTop);
+            lua_pushcclosure(LuaState->state, pointer, 0);
+            lua_setglobal(LuaState->state, name);
+            lua_settop(LuaState->state, newTop);
         }
 
         public void SetGlobal(string path, object obj)
@@ -58,8 +57,8 @@ namespace HadesExtender
             if (LuaState == null || LuaState->state == IntPtr.Zero) throw new Exception("LuaState is null");
             if (obj is double d)
             {
-                s_LuaPushNumber(LuaState->state, d);
-                s_LuaSetGlobal(LuaState->state, path);
+                lua_pushnumber(LuaState->state, d);
+                lua_setglobal(LuaState->state, path);
             }
             else
             {

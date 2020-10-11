@@ -66,6 +66,7 @@ namespace HadesExtender
                 Kernel32.LoadLibrary("EngineWin64s.dll");
                 module = GetEngineModule();
                 resolver = new DiaSymbolResolver(module);
+                PdbSymbolImporter.ImportSymbols(resolver);
 
                 Hook<InitLuaDelegate>("?InitLua@ScriptManager@sgg@@SAXXZ", InitLua);
                 Hook<ScreenManagerUpdateDelegate>("?Update@ScreenManager@sgg@@QEAAXM@Z", ScreenManagerUpdate);
