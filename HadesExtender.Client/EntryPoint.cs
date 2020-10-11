@@ -33,6 +33,9 @@ namespace HadesExtender
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         delegate void InitLuaDelegate();
 
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        delegate void CursorManagerInitializeDelegate(IntPtr platformCusorFactory);
+
         ScriptManager scriptManager;
 
         [SuppressMessage("Style", "IDE0060", Justification = "Required by EasyHook")]
@@ -66,6 +69,7 @@ namespace HadesExtender
 
                 Hook<InitLuaDelegate>("?InitLua@ScriptManager@sgg@@SAXXZ", InitLua);
                 Hook<ScreenManagerUpdateDelegate>("?Update@ScreenManager@sgg@@QEAAXM@Z", ScreenManagerUpdate);
+                Hook<CursorManagerInitializeDelegate>("?Initialize@CursorManager@sgg@@SAXPEAVPlatformCursorFactory@2@@Z", CursorManagerInitialize);
                 Hook<StartAppDelegate>("StartApp", StartApp);
                 Hook<InitWindowDelegate>("InitWindow", InitWindow);
                 Hook<AppMainDelegate>("AppMain", AppMain);
@@ -159,9 +163,19 @@ namespace HadesExtender
             if (ScreenManagerUpdateCount < 10)
             {
                 Console.WriteLine($"ScreenManagerUpdate: {delta}");
+                ScreenManagerUpdateCount++;
             }
         }
+        
+        private void CursorManagerInitialize(IntPtr platformCursorManager)
+        {
+            Console.WriteLine($"CursorManagerInitialize Start");
+            var bypass = HookRuntimeInfo.Handle.HookBypassAddress;
+            var method = Marshal.GetDelegateForFunctionPointer<CursorManagerInitializeDelegate>(bypass);
+            method.Invoke(platformCursorManager);
 
+            Console.WriteLine($"CursorManagerInitialize End");
+        }
         private IntPtr StartApp(uint param)
         {
             Console.WriteLine($"StartApp Start {param}");
