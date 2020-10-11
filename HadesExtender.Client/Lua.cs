@@ -46,9 +46,11 @@ namespace HadesExtender
         public void RegisterFunction<T>(string name, T method) where T : Delegate
         {
             if (LuaState == null || LuaState->state == IntPtr.Zero) throw new Exception("LuaState is null");
+            var newTop = s_LuaGetTop(LuaState->state);
             var pointer = Marshal.GetFunctionPointerForDelegate(method);
             s_LuaPushCClosure(LuaState->state, pointer, 0);
             s_LuaSetGlobal(LuaState->state, name);
+            s_LuaSetTop(LuaState->state, newTop);
         }
 
         public void SetGlobal(string path, object obj)
