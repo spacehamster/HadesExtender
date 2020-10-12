@@ -34,6 +34,12 @@ namespace HadesExtender
         delegate void InitLuaDelegate();
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        delegate void ScriptManagerInitDelegate();
+
+        [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+        delegate void ResetAppDelegate(IntPtr app, byte param1, IntPtr param2);
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         delegate void CursorManagerInitializeDelegate(IntPtr platformCusorFactory);
 
         ScriptManager scriptManager;
@@ -69,8 +75,10 @@ namespace HadesExtender
                 PdbSymbolImporter.ImportSymbols(resolver);
 
                 Hook<InitLuaDelegate>("?InitLua@ScriptManager@sgg@@SAXXZ", InitLua);
+                Hook<ScriptManagerInitDelegate>("?Init@ScriptManager@sgg@@SAXXZ", ScriptManagerInit);
                 Hook<ScreenManagerUpdateDelegate>("?Update@ScreenManager@sgg@@QEAAXM@Z", ScreenManagerUpdate);
                 Hook<CursorManagerInitializeDelegate>("?Initialize@CursorManager@sgg@@SAXPEAVPlatformCursorFactory@2@@Z", CursorManagerInitialize);
+                Hook<ResetAppDelegate>("?Reset@App@sgg@@QEAAX_NAEBV?$basic_string@DVallocator_forge@eastl@@@eastl@@@Z", ResetApp);
                 Hook<StartAppDelegate>("StartApp", StartApp);
                 Hook<InitWindowDelegate>("InitWindow", InitWindow);
                 Hook<AppMainDelegate>("AppMain", AppMain);
@@ -140,14 +148,32 @@ namespace HadesExtender
         {
             try
             {
-                Console.WriteLine($"InitLua called1");
+                Console.WriteLine($"InitLua Start");
 
                 var bypass = HookRuntimeInfo.Handle.HookBypassAddress;
                 var method = Marshal.GetDelegateForFunctionPointer<InitLuaDelegate>(bypass);
                 method.Invoke();
 
-                Console.WriteLine($"InitLua called2");
+                Console.WriteLine($"InitLua End");
                 scriptManager.Init();
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex.ToString());
+            }
+        }
+
+        private void ScriptManagerInit()
+        {
+            try
+            {
+                Console.WriteLine($"ScriptManagerInit Start");
+
+                var bypass = HookRuntimeInfo.Handle.HookBypassAddress;
+                var method = Marshal.GetDelegateForFunctionPointer < ScriptManagerInitDelegate>(bypass);
+                method.Invoke();
+
+                Console.WriteLine($"ScriptManagerInit End");
             }
             catch (Exception ex)
             {
@@ -167,6 +193,17 @@ namespace HadesExtender
                 Console.WriteLine($"ScreenManagerUpdate: {delta}");
                 ScreenManagerUpdateCount++;
             }
+        }
+
+
+        private void ResetApp(IntPtr app, byte param1, IntPtr param2)
+        {
+            Console.WriteLine($"ResetApp Start");
+            var bypass = HookRuntimeInfo.Handle.HookBypassAddress;
+            var method = Marshal.GetDelegateForFunctionPointer<ResetAppDelegate>(bypass);
+            method.Invoke(app, param1, param2);
+
+            Console.WriteLine($"ResetApp End");
         }
 
         private void CursorManagerInitialize(IntPtr platformCursorManager)
@@ -205,7 +242,7 @@ namespace HadesExtender
 
         private void AppMain(int argc, IntPtr argv, IntPtr app)
         {
-            Console.WriteLine($"AppMain End");
+            Console.WriteLine($"AppMain Start");
 
             var bypass = HookRuntimeInfo.Handle.HookBypassAddress;
             var method = Marshal.GetDelegateForFunctionPointer<AppMainDelegate>(bypass);
@@ -213,5 +250,7 @@ namespace HadesExtender
 
             Console.WriteLine($"AppMain End");
         }
+
+
     }
 }
