@@ -148,7 +148,8 @@ namespace HadesExtender
 
                 Console.WriteLine($"InitLua called2");
                 scriptManager.Init();
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Console.Error.WriteLine(ex.ToString());
             }
@@ -167,7 +168,7 @@ namespace HadesExtender
                 ScreenManagerUpdateCount++;
             }
         }
-        
+
         private void CursorManagerInitialize(IntPtr platformCursorManager)
         {
             Console.WriteLine($"CursorManagerInitialize Start");
