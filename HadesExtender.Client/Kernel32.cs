@@ -16,5 +16,16 @@ namespace HadesExtender
 
         [DllImport("kernel32", SetLastError = true)]
         public static extern IntPtr LoadLibrary(string fileName);
+
+        [DllImport("kernel32", SetLastError = true)]
+        public static extern bool FreeConsole();
+
+        public const int ATTACH_PARENT_PROCESS = -1;
+
+        [DllImport("kernel32", SetLastError = true)]
+        public static extern bool AttachConsole(int dwProcessId);
+
+        [DllImport("kernel32")]
+        public static extern IntPtr GetCurrentThread();
     }
 }

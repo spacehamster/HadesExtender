@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using EasyHook;
 using System.Runtime.InteropServices;
+using System.IO;
+using System.Collections.Generic;
 
 namespace HadesExtender
 {
@@ -44,15 +46,21 @@ namespace HadesExtender
 
         ScriptManager scriptManager;
 
+        static void AttachToParentConsole()
+        {
+            Kernel32.FreeConsole();
+            Kernel32.AttachConsole(Kernel32.ATTACH_PARENT_PROCESS);
+            Console.SetIn(new StreamReader(Console.OpenStandardInput()));
+            Console.SetOut(new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true });
+            Console.SetError(new StreamWriter(Console.OpenStandardError()) { AutoFlush = true });
+        }
+
         [SuppressMessage("Style", "IDE0060", Justification = "Required by EasyHook")]
         public EntryPoint(RemoteHooking.IContext context, string channelName)
         {
             server = RemoteHooking.IpcConnectClient<IpcInterface>(channelName);
-            Console.SetIn(server.In);
-            Console.SetOut(new TextWriterWrapper(server.Out));
-            Console.SetError(new TextWriterWrapper(server.Error));
+            AttachToParentConsole();
         }
-
         [SuppressMessage("Style", "IDE0060", Justification = "Required by EasyHook")]
         public void Run(RemoteHooking.IContext context, string channelName)
         {
@@ -68,6 +76,7 @@ namespace HadesExtender
                 var loadLibraryAFunc = Kernel32.GetProcAddress(kernel, "LoadLibraryA");
                 var hook = LocalHook.Create(loadLibraryAFunc, new LoadLibraryADelegate(LoadLibraryHook), null);
                 hook.ThreadACL.SetExclusiveACL(Array.Empty<int>());
+                Hooks.Add("LoadLibraryA", hook);
 
                 Kernel32.LoadLibrary("EngineWin64s.dll");
                 module = GetEngineModule();
@@ -85,7 +94,6 @@ namespace HadesExtender
 
                 scriptManager = new ScriptManager(resolver);
                 Console.WriteLine($"Created ScriptManager");
-
                 RemoteHooking.WakeUpProcess();
 
                 while (true)
@@ -100,12 +108,14 @@ namespace HadesExtender
                 throw;
             }
         }
-
-        static void Hook<T>(string name, T callback) where T : Delegate
+        //Add hooks to dictionary to prevent them being GC'd
+        Dictionary<string, LocalHook> Hooks = new Dictionary<string, LocalHook>();
+        void Hook<T>(string name, T callback) where T : Delegate
         {
             var address = resolver.Resolve(name);
             var hook = LocalHook.Create(address, callback, null);
             hook.ThreadACL.SetExclusiveACL(Array.Empty<int>());
+            Hooks.Add(name, hook);
             Console.WriteLine($"Hooked {name}");
         }
 
