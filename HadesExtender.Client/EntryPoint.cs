@@ -98,6 +98,9 @@ namespace HadesExtender
 
                 while (true)
                 {
+                    var code = Console.ReadLine();
+                    Console.WriteLine("> {0}", code);
+                    scriptManager.Eval(code);
                     server.Ping();
                     Thread.Sleep(500);
                 }

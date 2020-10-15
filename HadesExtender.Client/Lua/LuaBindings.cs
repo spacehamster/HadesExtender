@@ -177,7 +177,7 @@ namespace HadesExtender
         public static LuaNextDelegate lua_next = null;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate int LuaPCallKDelegate(LuaState L,
+        public delegate ResultCode LuaPCallKDelegate(LuaState L,
             int nargs,
             int nresults,
             int errfunc,
@@ -423,7 +423,7 @@ namespace HadesExtender
         public static LuaLAddLStringDelegate luaL_addlstring = null;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public unsafe delegate void LuaLAddStringDelegate(LuaBuffer B, [MarshalAs(UnmanagedType.LPStr)] LuaInteger s);
+        public unsafe delegate void LuaLAddStringDelegate(LuaBuffer B, [MarshalAs(UnmanagedType.LPStr)] string s);
         [PdbSymbol]
         public static LuaLAddStringDelegate luaL_addstring = null;
 
@@ -464,7 +464,8 @@ namespace HadesExtender
         public static LuaLCheckIntegerDelegate luaL_checkinteger = null;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public unsafe delegate IntPtr LuaLCheckLStringDelegate(LuaState L, int arg, IntPtr l);
+        [return:MarshalAs(UnmanagedType.LPStr)]
+        public unsafe delegate string LuaLCheckLStringDelegate(LuaState L, int arg, IntPtr l);
         [PdbSymbol]
         public static LuaLCheckLStringDelegate luaL_checklstring = null;
 
@@ -523,7 +524,7 @@ namespace HadesExtender
         public static LuaLLenDelegate luaL_len = null;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public unsafe delegate int LuaLLoadBufferXDelegate(LuaState L, 
+        public unsafe delegate ResultCode LuaLLoadBufferXDelegate(LuaState L, 
             [MarshalAs(UnmanagedType.LPStr)] string buff, 
             LuaInteger sz,
             [MarshalAs(UnmanagedType.LPStr)] string name,

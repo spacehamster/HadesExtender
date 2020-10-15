@@ -22,11 +22,21 @@ namespace HadesExtender
             lua.RegisterFunction<Action>("TestLog", TestLog);
             Console.WriteLine("Registered TesValue global");
             lua.SetGlobal("TestValue", (double)5);
-
         }
         public void TestLog()
         {
             Console.WriteLine("TestLog triggered");
+        }
+
+        public void Eval(string code)
+        {
+            try
+            {
+                lua.Eval(code);
+            } catch(Exception ex)
+            {
+                Console.Error.WriteLine(ex.ToString());
+            }
         }
     }
 }

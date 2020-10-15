@@ -12,34 +12,41 @@ namespace HadesExtender
         {
             foreach (var field in GetFieldsWithAttribute<PdbSymbolAttribute>())
             {
-                if (!field.IsStatic)
+                try
                 {
-                    Console.Error.WriteLine("{0}.{1} must be static.", field.DeclaringType, field.Name);
-                    continue;
-                }
+                    if (!field.IsStatic)
+                    {
+                        Console.Error.WriteLine("{0}.{1} must be static.", field.DeclaringType, field.Name);
+                        continue;
+                    }
 
-                var symbolAttribute = GetCustomAttribute<PdbSymbolAttribute>(field);
-                var symbolName = string.IsNullOrEmpty(symbolAttribute.SymbolName) ? 
-                    field.Name : 
-                    symbolAttribute.SymbolName;
+                    var symbolAttribute = GetCustomAttribute<PdbSymbolAttribute>(field);
+                    var symbolName = string.IsNullOrEmpty(symbolAttribute.SymbolName) ?
+                        field.Name :
+                        symbolAttribute.SymbolName;
 
-                if(!resolver.TryResolve(symbolName, out var address))
+                    if (!resolver.TryResolve(symbolName, out var address))
+                    {
+                        var errorMessage = string.Format("{0} in {1}.{2}",
+                            symbolName, field.DeclaringType, field.Name);
+                        throw new UnresolvedSymbolException(errorMessage);
+                    }
+
+                    if (field.FieldType == typeof(IntPtr))
+                        field.SetValue(null, address);
+                    else if (field.FieldType == typeof(UIntPtr))
+                        field.SetValue(null, new UIntPtr(address.ToPointer()));
+                    else if (field.FieldType.IsPointer)
+                        CreateStaticSetter<IntPtr>(field).Invoke(address);
+                    else if (field.FieldType.IsSubclassOf(typeof(Delegate)))
+                        field.SetValue(null, Marshal.GetDelegateForFunctionPointer(address, field.FieldType));
+                    else
+                        Console.Error.WriteLine("{0}.{1} must be of IntPtr, UIntPtr or delegate type.", field.DeclaringType, field.Name);
+                } catch(MarshalDirectiveException ex)
                 {
-                    var errorMessage = string.Format("{0} in {1}.{2}",
-                        symbolName, field.DeclaringType, field.Name);
-                    throw new UnresolvedSymbolException(errorMessage);
+                    Console.Error.WriteLine("Error importing {0}.{1}", field.DeclaringType, field.Name);
+                    throw;
                 }
-
-                if (field.FieldType == typeof(IntPtr))
-                    field.SetValue(null, address);
-                else if (field.FieldType == typeof(UIntPtr))
-                    field.SetValue(null, new UIntPtr(address.ToPointer()));
-                else if (field.FieldType.IsPointer)
-                    CreateStaticSetter<IntPtr>(field).Invoke(address);
-                else if (field.FieldType.IsSubclassOf(typeof(Delegate)))
-                    field.SetValue(null, Marshal.GetDelegateForFunctionPointer(address, field.FieldType));
-                else
-                    Console.Error.WriteLine("{0}.{1} must be of IntPtr, UIntPtr or delegate type.", field.DeclaringType, field.Name);
             }
         }
         static IEnumerable<FieldInfo> GetFieldsWithAttribute<T>()
