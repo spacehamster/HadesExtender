@@ -416,5 +416,198 @@ namespace HadesExtender
         public unsafe delegate void LuaXMoveDelegate(LuaState from, LuaState to, int n);
         [PdbSymbol]
         public static LuaXMoveDelegate lua_xmove = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate void LuaLAddLStringDelegate(LuaBuffer B, IntPtr s, LuaInteger size);
+        [PdbSymbol]
+        public static LuaLAddLStringDelegate luaL_addlstring = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate void LuaLAddStringDelegate(LuaBuffer B, [MarshalAs(UnmanagedType.LPStr)] LuaInteger s);
+        [PdbSymbol]
+        public static LuaLAddStringDelegate luaL_addstring = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate void LuaLAddValueDelegate(LuaBuffer B);
+        [PdbSymbol]
+        public static LuaLAddValueDelegate luaL_addvalue = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate int LuaLArgErrorDelegate(LuaState L, int arg, [MarshalAs(UnmanagedType.LPStr)] string extramsg);
+        [PdbSymbol]
+        public static LuaLArgErrorDelegate luaL_argerror = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate void LuaLBuffInitDelegate(LuaState L, LuaBuffer B);
+        [PdbSymbol]
+        public static LuaLBuffInitDelegate luaL_buffinit = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        public unsafe delegate string LuaLBuffInitSizeDelegate(LuaState L, LuaBuffer B, LuaInteger sz);
+        [PdbSymbol]
+        public static LuaLBuffInitSizeDelegate luaL_buffinitsize = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate int LuaLCallMetaDelegate(LuaState L, int obj, [MarshalAs(UnmanagedType.LPStr)] string e);
+        [PdbSymbol]
+        public static LuaLCallMetaDelegate luaL_callmeta = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate void LuaLCheckAnyDelegate(LuaState L, int arg);
+        [PdbSymbol]
+        public static LuaLCheckAnyDelegate luaL_checkany = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate int LuaLCheckIntegerDelegate(LuaState L, int arg);
+        [PdbSymbol]
+        public static LuaLCheckIntegerDelegate luaL_checkinteger = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate IntPtr LuaLCheckLStringDelegate(LuaState L, int arg, IntPtr l);
+        [PdbSymbol]
+        public static LuaLCheckLStringDelegate luaL_checklstring = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate double LuaLCheckNumberDelegate(LuaState L, int arg);
+        [PdbSymbol]
+        public static LuaLCheckNumberDelegate luaL_checknumber = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate int LuaLCheckOptionDelegate(LuaState L, 
+                int arg,
+                [MarshalAs(UnmanagedType.LPStr)] string def,
+                [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] list
+                );
+        [PdbSymbol]
+        public static LuaLCheckOptionDelegate luaL_checkoption = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate void LuaLCheckStackDelegate(LuaState L, int sz, [MarshalAs(UnmanagedType.LPStr)] string msg);
+        [PdbSymbol]
+        public static LuaLCheckStackDelegate luaL_checkstack = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate void LuaLCheckTypeDelegate(LuaState L, int arg, int t);
+        [PdbSymbol]
+        public static LuaLCheckTypeDelegate luaL_checktype = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate uint LuaLCheckUnsignedDelegate(LuaState L, int arg);
+        [PdbSymbol]
+        public static LuaLCheckUnsignedDelegate luaL_checkunsigned = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate void LuaLCheckVersionDelegate(LuaState L);
+        [PdbSymbol]
+        public static LuaLCheckVersionDelegate luaL_checkversion_ = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate int LuaLErrorDelegate(LuaState L, [MarshalAs(UnmanagedType.LPStr)] string fmt, IntPtr vargs);
+        [PdbSymbol]
+        public static LuaLErrorDelegate luaL_error = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate int LuaLGetMetaFieldDelegate(LuaState L, int obj, [MarshalAs(UnmanagedType.LPStr)] string e);
+        [PdbSymbol]
+        public static LuaLGetMetaFieldDelegate luaL_getmetafield = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate int LuaLGetSubtableDelegate(LuaState L, int index, [MarshalAs(UnmanagedType.LPStr)] string fname);
+        [PdbSymbol]
+        public static LuaLGetSubtableDelegate luaL_getsubtable = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate int LuaLLenDelegate(LuaState L, int index);
+        [PdbSymbol]
+        public static LuaLLenDelegate luaL_len = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate int LuaLLoadBufferXDelegate(LuaState L, 
+            [MarshalAs(UnmanagedType.LPStr)] string buff, 
+            LuaInteger sz,
+            [MarshalAs(UnmanagedType.LPStr)] string name,
+            [MarshalAs(UnmanagedType.LPStr)] string mode);
+        [PdbSymbol]
+        public static LuaLLoadBufferXDelegate luaL_loadbufferx = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate int LuaLLoadFileXDelegate(LuaState L, 
+            [MarshalAs(UnmanagedType.LPStr)] string filename, 
+            [MarshalAs(UnmanagedType.LPStr)] string mode);
+        [PdbSymbol]
+        public static LuaLLoadFileXDelegate luaL_loadfilex = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate void LuaLOpenLibsDelegate(LuaState L);
+        [PdbSymbol]
+        public static LuaLOpenLibsDelegate luaL_openlibs = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate LuaInteger LuaLOptIntegerDelegate(LuaState L, int arg, LuaInteger d);
+        [PdbSymbol]
+        public static LuaLOptIntegerDelegate luaL_optinteger = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate IntPtr LuaLOptLStringDelegate(LuaState L, int arg, IntPtr d, IntPtr l);
+        [PdbSymbol]
+        public static LuaLOptLStringDelegate luaL_optlstring = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        public unsafe delegate string LuaLPrepBufferSizeDelegate(LuaBuffer B, LuaInteger sz);
+        [PdbSymbol]
+        public static LuaLPrepBufferSizeDelegate luaL_prepbuffsize = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate void LuaLPushResultDelegate(LuaBuffer B);
+        [PdbSymbol]
+        public static LuaLPushResultDelegate luaL_pushresult = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate void LuaLPushResultSizeDelegate(LuaBuffer B, LuaInteger sz);
+        [PdbSymbol]
+        public static LuaLPushResultSizeDelegate luaL_pushresultsize = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate int LuaLRefDelegate(LuaState L, int t);
+        [PdbSymbol]
+        public static LuaLRefDelegate luaL_ref = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate void LuaLRequireFDelegate(LuaState L, 
+            [MarshalAs(UnmanagedType.LPStr)] string modname,
+            LuaIsCFunction openf,
+            int glb);
+        [PdbSymbol]
+        public static LuaLRequireFDelegate luaL_requiref = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate void LuaLSetFuncsDelegate(LuaState L, IntPtr l, int nup);
+        [PdbSymbol]
+        public static LuaLSetFuncsDelegate luaL_setfuncs = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate IntPtr LuaLToLStringDelegate(LuaState L, int index, IntPtr len);
+        [PdbSymbol]
+        public static LuaLToLStringDelegate luaL_tolstring = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate void LuaLTracebackDelegate(LuaState L, 
+            LuaState L1, 
+            [MarshalAs(UnmanagedType.LPStr)] string msg,
+            int level);
+        [PdbSymbol]
+        public static LuaLTracebackDelegate luaL_traceback = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate void LuaLUnrefDelegate(LuaState L, int t, int _ref);
+        [PdbSymbol]
+        public static LuaLUnrefDelegate luaL_unref = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate void LuaLWhereDelegate(LuaState L, int lvl);
+        [PdbSymbol]
+        public static LuaLWhereDelegate luaL_where = null;
     }
 }
