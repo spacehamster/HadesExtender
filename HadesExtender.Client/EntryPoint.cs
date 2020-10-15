@@ -20,29 +20,11 @@ namespace HadesExtender
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         delegate IntPtr LoadLibraryADelegate(string fileName);
 
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        delegate IntPtr StartAppDelegate(uint param);
-
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        delegate IntPtr InitWindowDelegate();
-
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        delegate void AppMainDelegate(int argc, IntPtr argv, IntPtr app);
-
         [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
         delegate void ScreenManagerUpdateDelegate(IntPtr screenManager, float delta);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         delegate void InitLuaDelegate();
-
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        delegate void ScriptManagerInitDelegate();
-
-        [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-        delegate void ResetAppDelegate(IntPtr app, byte param1, IntPtr param2);
-
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        delegate void CursorManagerInitializeDelegate(IntPtr platformCusorFactory);
 
         ScriptManager scriptManager;
 
@@ -84,13 +66,7 @@ namespace HadesExtender
                 PdbSymbolImporter.ImportSymbols(resolver);
 
                 Hook<InitLuaDelegate>("?InitLua@ScriptManager@sgg@@SAXXZ", InitLua);
-                Hook<ScriptManagerInitDelegate>("?Init@ScriptManager@sgg@@SAXXZ", ScriptManagerInit);
                 Hook<ScreenManagerUpdateDelegate>("?Update@ScreenManager@sgg@@QEAAXM@Z", ScreenManagerUpdate);
-                Hook<CursorManagerInitializeDelegate>("?Initialize@CursorManager@sgg@@SAXPEAVPlatformCursorFactory@2@@Z", CursorManagerInitialize);
-                Hook<ResetAppDelegate>("?Reset@App@sgg@@QEAAX_NAEBV?$basic_string@DVallocator_forge@eastl@@@eastl@@@Z", ResetApp);
-                Hook<StartAppDelegate>("StartApp", StartApp);
-                Hook<InitWindowDelegate>("InitWindow", InitWindow);
-                Hook<AppMainDelegate>("AppMain", AppMain);
 
                 scriptManager = new ScriptManager(resolver);
                 Console.WriteLine($"Created ScriptManager");
@@ -176,24 +152,6 @@ namespace HadesExtender
             }
         }
 
-        private void ScriptManagerInit()
-        {
-            try
-            {
-                Console.WriteLine($"ScriptManagerInit Start");
-
-                var bypass = HookRuntimeInfo.Handle.HookBypassAddress;
-                var method = Marshal.GetDelegateForFunctionPointer < ScriptManagerInitDelegate>(bypass);
-                method.Invoke();
-
-                Console.WriteLine($"ScriptManagerInit End");
-            }
-            catch (Exception ex)
-            {
-                Console.Error.WriteLine(ex.ToString());
-            }
-        }
-
         int ScreenManagerUpdateCount = 0;
         private void ScreenManagerUpdate(IntPtr screenManager, float delta)
         {
@@ -207,63 +165,5 @@ namespace HadesExtender
                 ScreenManagerUpdateCount++;
             }
         }
-
-
-        private void ResetApp(IntPtr app, byte param1, IntPtr param2)
-        {
-            Console.WriteLine($"ResetApp Start");
-            var bypass = HookRuntimeInfo.Handle.HookBypassAddress;
-            var method = Marshal.GetDelegateForFunctionPointer<ResetAppDelegate>(bypass);
-            method.Invoke(app, param1, param2);
-
-            Console.WriteLine($"ResetApp End");
-        }
-
-        private void CursorManagerInitialize(IntPtr platformCursorManager)
-        {
-            Console.WriteLine($"CursorManagerInitialize Start");
-            var bypass = HookRuntimeInfo.Handle.HookBypassAddress;
-            var method = Marshal.GetDelegateForFunctionPointer<CursorManagerInitializeDelegate>(bypass);
-            method.Invoke(platformCursorManager);
-
-            Console.WriteLine($"CursorManagerInitialize End");
-        }
-        private IntPtr StartApp(uint param)
-        {
-            Console.WriteLine($"StartApp Start {param}");
-
-            var bypass = HookRuntimeInfo.Handle.HookBypassAddress;
-            var method = Marshal.GetDelegateForFunctionPointer<StartAppDelegate>(bypass);
-            var result = method.Invoke(param);
-
-            Console.WriteLine($"StartApp End");
-
-            return result;
-        }
-
-        private IntPtr InitWindow()
-        {
-            Console.WriteLine($"InitWindow Start");
-            var bypass = HookRuntimeInfo.Handle.HookBypassAddress;
-            var method = Marshal.GetDelegateForFunctionPointer<InitWindowDelegate>(bypass);
-            var result = method.Invoke();
-
-            Console.WriteLine($"InitWindow End");
-
-            return result;
-        }
-
-        private void AppMain(int argc, IntPtr argv, IntPtr app)
-        {
-            Console.WriteLine($"AppMain Start");
-
-            var bypass = HookRuntimeInfo.Handle.HookBypassAddress;
-            var method = Marshal.GetDelegateForFunctionPointer<AppMainDelegate>(bypass);
-            method.Invoke(argc, argv, app);
-
-            Console.WriteLine($"AppMain End");
-        }
-
-
     }
 }
