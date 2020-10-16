@@ -7,7 +7,7 @@ namespace HadesExtender
     {
         SymbolResolver Resolver;
         Lua lua;
-
+        delegate void LuaFunc(LuaState L);
         public ScriptManager(SymbolResolver resolver)
         {
             Console.WriteLine("Initializing ScriptManager");
@@ -19,13 +19,19 @@ namespace HadesExtender
         public void Init()
         {
             Console.WriteLine("Registered TestLog function");
-            lua.RegisterFunction<Action>("TestLog", TestLog);
+            lua.RegisterFunction<LuaFunc>("TestLog", TestLog);
             Console.WriteLine("Registered TesValue global");
             lua.SetGlobal("TestValue", (double)5);
         }
-        public void TestLog()
+        public void TestLog(LuaState L)
         {
-            Console.WriteLine("TestLog triggered");
+            int nargs = LuaBindings.lua_gettop(L);
+            for (int i = 1; i <= nargs; ++i)
+            {
+                var text = LuaBindings.luaL_tolstring(L, i, IntPtr.Zero);
+                Console.Write(text);
+            }
+            Console.WriteLine();
         }
 
         public void Eval(string code)

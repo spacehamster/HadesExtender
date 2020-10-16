@@ -96,7 +96,7 @@ namespace HadesExtender
         public static LuaGetInfoDelegate lua_getinfo = null;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        [return:MarshalAs(UnmanagedType.LPStr)]
+        [return:MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(LStringMarshaler))]
         public delegate string LuaGetLocalDelegate(LuaState L,IntPtr ar, int n);
         [PdbSymbol]
         public static LuaGetLocalDelegate lua_getlocal = null;
@@ -122,7 +122,7 @@ namespace HadesExtender
         public static LueGetTopDelegate lua_gettop = null;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        [return:MarshalAs(UnmanagedType.LPStr)]
+        [return:MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(LStringMarshaler))]
         public delegate string LuaGetUpValue(LuaState L, int funcindex, int n);
         [PdbSymbol]
         public static LuaGetUpValue lua_getupvalue = null;
@@ -311,7 +311,7 @@ namespace HadesExtender
         public static LuaSetHookDelegate lua_sethook = null;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        [return:MarshalAs(UnmanagedType.LPStr)]
+        [return:MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(LStringMarshaler))]
         public delegate string LuaSetLocalDelegate(LuaState L, IntPtr ar, int n);
         [PdbSymbol]
         public static LuaSetLocalDelegate lua_setlocal = null;
@@ -357,7 +357,8 @@ namespace HadesExtender
         public static LuaToIntegerXDelegate lua_tointegerx = null;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate IntPtr LuaToLStringDelegate(LuaState L, int index, out LuaInteger len);
+        [return:MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(LStringMarshaler))]
+        public delegate string LuaToLStringDelegate(LuaState L, int index, IntPtr len);
         [PdbSymbol]
         public static LuaToLStringDelegate lua_tolstring = null;
 
@@ -392,7 +393,7 @@ namespace HadesExtender
         public static LuaTypeDelegate lua_type = null;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        [return:MarshalAs(UnmanagedType.LPStr)]
+        [return:MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(LStringMarshaler))]
         public delegate string LuaTypeNameDelegate(LuaState L, int tp);
         [PdbSymbol]
         public static LuaTypeNameDelegate lua_typename = null;
@@ -464,7 +465,7 @@ namespace HadesExtender
         public static LuaLCheckIntegerDelegate luaL_checkinteger = null;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        [return:MarshalAs(UnmanagedType.LPStr)]
+        [return:MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(LStringMarshaler))]
         public unsafe delegate string LuaLCheckLStringDelegate(LuaState L, int arg, IntPtr l);
         [PdbSymbol]
         public static LuaLCheckLStringDelegate luaL_checklstring = null;
@@ -589,7 +590,8 @@ namespace HadesExtender
         public static LuaLSetFuncsDelegate luaL_setfuncs = null;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public unsafe delegate IntPtr LuaLToLStringDelegate(LuaState L, int index, IntPtr len);
+        [return:MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(LStringMarshaler))]
+        public unsafe delegate string LuaLToLStringDelegate(LuaState L, int index, IntPtr len);
         [PdbSymbol]
         public static LuaLToLStringDelegate luaL_tolstring = null;
 
