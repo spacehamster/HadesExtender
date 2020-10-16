@@ -60,7 +60,7 @@ namespace HadesExtender
 
        void PrintError()
         {
-            Console.Error.WriteLine($"Error: {0}",
+            Console.Error.WriteLine("Error: {0}",
                 luaL_checklstring(LuaState->state, -1, IntPtr.Zero));
         }
     }
