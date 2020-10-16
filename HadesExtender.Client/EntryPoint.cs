@@ -11,8 +11,6 @@ namespace HadesExtender
 {
     public class EntryPoint : IEntryPoint
     {
-        static IpcInterface server;
-
         static ProcessModule module;
 
         static DiaSymbolResolver resolver;
@@ -38,13 +36,13 @@ namespace HadesExtender
         }
 
         [SuppressMessage("Style", "IDE0060", Justification = "Required by EasyHook")]
-        public EntryPoint(RemoteHooking.IContext context, string channelName)
+        public EntryPoint(RemoteHooking.IContext context)
         {
-            server = RemoteHooking.IpcConnectClient<IpcInterface>(channelName);
             AttachToParentConsole();
         }
+
         [SuppressMessage("Style", "IDE0060", Justification = "Required by EasyHook")]
-        public void Run(RemoteHooking.IContext context, string channelName)
+        public void Run(RemoteHooking.IContext context)
         {
             try
             {
@@ -77,7 +75,6 @@ namespace HadesExtender
                     var code = Console.ReadLine();
                     Console.WriteLine("> {0}", code);
                     scriptManager.Eval(code);
-                    server.Ping();
                     Thread.Sleep(500);
                 }
             }
