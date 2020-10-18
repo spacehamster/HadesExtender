@@ -40,17 +40,15 @@ namespace HadesExtender
         {
             AttachToParentConsole();
         }
+        
+        public bool Is64Bit => IntPtr.Size == 8;
 
         [SuppressMessage("Style", "IDE0060", Justification = "Required by EasyHook")]
         public void Run(RemoteHooking.IContext context)
         {
             try
             {
-                foreach (ProcessModule module in Process.GetCurrentProcess().Modules)
-                {
-                    Console.WriteLine($"Module: {module.ModuleName}");
-                }
-                Console.WriteLine();
+
 
                 var kernel = GetKernelModule().BaseAddress;
                 var loadLibraryAFunc = Kernel32.GetProcAddress(kernel, "LoadLibraryA");
@@ -58,7 +56,20 @@ namespace HadesExtender
                 hook.ThreadACL.SetExclusiveACL(Array.Empty<int>());
                 Hooks.Add("LoadLibraryA", hook);
 
-                Kernel32.LoadLibrary("EngineWin64s.dll");
+                if (Is64Bit)
+                {
+                    Kernel32.LoadLibrary("EngineWin64s.dll");
+                } else
+                {
+                    Kernel32.LoadLibrary("EngineWin32s.dll");
+                }
+
+                foreach (ProcessModule module in Process.GetCurrentProcess().Modules)
+                {
+                    Console.WriteLine($"Module: {module.ModuleName}");
+                }
+                Console.WriteLine();
+
                 module = GetEngineModule();
                 resolver = new DiaSymbolResolver(module);
                 PdbSymbolImporter.ImportSymbols(resolver);
@@ -99,11 +110,11 @@ namespace HadesExtender
         {
             foreach (ProcessModule module in Process.GetCurrentProcess().Modules)
             {
-                if (module.ModuleName.StartsWith("EngineWin64"))
+                if (module.ModuleName.StartsWith("EngineWin"))
                     return module;
             }
 
-            throw new MissingModuleException("EngineWin64");
+            throw new MissingModuleException("EngineWin");
         }
 
         ProcessModule GetKernelModule()
