@@ -15,7 +15,7 @@ namespace HadesExtender
 
         static DiaSymbolResolver resolver;
 
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         delegate IntPtr LoadLibraryADelegate(string fileName);
 
         [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
