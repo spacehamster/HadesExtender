@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Threading;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
-using Dia2Lib;
 using System.Runtime.InteropServices;
 
 namespace HadesExtender
@@ -58,9 +56,8 @@ namespace HadesExtender
         {
 
             targetModule = module;
-            resolverId = Process.GetCurrentProcess().MainModule.BaseAddress;
-            if (targetModule.BaseAddress == resolverId)
-                throw new InvalidOperationException($"DbgHelpSymbolResolver cannot be initialized from target module");
+            //resolverId needs to be unique
+            resolverId = new IntPtr((Process.GetCurrentProcess().MainModule.FileName + module.FileName).GetHashCode());
             cache = new ConcurrentDictionary<string, IntPtr>();
 
             lock (lockObj)
