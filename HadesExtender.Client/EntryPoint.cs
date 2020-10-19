@@ -71,6 +71,7 @@ namespace HadesExtender
                 module = GetEngineModule();
                 resolver = new DiaSymbolResolver(module);
                 PdbSymbolImporter.ImportSymbols(resolver);
+                LuaHelper.InitHelper(resolver);
 
                 Hook<InitLuaDelegate>("?InitLua@ScriptManager@sgg@@SAXXZ", InitLua);
                 Hook<ScreenManagerUpdateDelegate>("?Update@ScreenManager@sgg@@QEAAXM@Z", ScreenManagerUpdate);
@@ -151,6 +152,7 @@ namespace HadesExtender
 
                 Console.WriteLine($"InitLua End");
                 scriptManager.Init();
+                LuaHelper.OpenLibraries(scriptManager.State);
             }
             catch (Exception ex)
             {

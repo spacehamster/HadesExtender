@@ -6,13 +6,15 @@ namespace HadesExtender
     public unsafe class ScriptManager
     {
         SymbolResolver Resolver;
-        Lua lua;
+        public Lua lua;
         delegate void LuaFunc(LuaState L);
+        LuaInterface* luaInterface;
+        public LuaState State => luaInterface->state;
         public ScriptManager(SymbolResolver resolver)
         {
             Console.WriteLine("Initializing ScriptManager");
             Resolver = resolver;
-            var luaInterface = resolver.Resolve<LuaInterface>("?LUA_INTERFACE@ScriptManager@sgg@@2ULua@@A");
+            luaInterface = resolver.Resolve<LuaInterface>("?LUA_INTERFACE@ScriptManager@sgg@@2ULua@@A");
             lua = new Lua(resolver, luaInterface);
         }
 
