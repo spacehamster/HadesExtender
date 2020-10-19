@@ -5,3 +5,5 @@ Dia2Lib/*.c
 Dia2Lib/*.h
 Dia2Lib/*.dll
 Dia2Lib/*.tlb
+Debug/
+Release/

@@ -26,9 +26,9 @@ namespace HadesExtender
         public static LuaCheckStackDelegate lua_checkstack = null;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void LuaCLoseDelegate(LuaState L);
+        public delegate void LuaCloseDelegate(LuaState L);
         [PdbSymbol]
-        public static LuaCLoseDelegate lua_close = null;
+        public static LuaCloseDelegate lua_close = null;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate int LuaCompareDelegate(LuaState L, int index1, int index2, int op);
@@ -579,7 +579,7 @@ namespace HadesExtender
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public unsafe delegate void LuaLRequireFDelegate(LuaState L, 
             [MarshalAs(UnmanagedType.LPStr)] string modname,
-            LuaIsCFunction openf,
+            CFunction openf,
             int glb);
         [PdbSymbol]
         public static LuaLRequireFDelegate luaL_requiref = null;

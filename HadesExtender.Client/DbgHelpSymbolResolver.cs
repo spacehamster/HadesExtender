@@ -54,7 +54,6 @@ namespace HadesExtender
 
         public DbgHelpSymbolResolver(ProcessModule module)
         {
-
             targetModule = module;
             //resolverId needs to be unique
             resolverId = new IntPtr((Process.GetCurrentProcess().MainModule.FileName + module.FileName).GetHashCode());

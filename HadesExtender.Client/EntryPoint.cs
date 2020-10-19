@@ -48,8 +48,6 @@ namespace HadesExtender
         {
             try
             {
-
-
                 var kernel = GetKernelModule().BaseAddress;
                 var loadLibraryAFunc = Kernel32.GetProcAddress(kernel, "LoadLibraryA");
                 var hook = LocalHook.Create(loadLibraryAFunc, new LoadLibraryADelegate(LoadLibraryHook), null);

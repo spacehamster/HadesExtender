@@ -11,9 +11,15 @@
 
     <ItemGroup>
       <ProjectReference Include="..\HadesExtender.Client\HadesExtender.Client.csproj" />
+      <ProjectReference Include="..\LuaHelper\LuaHelper.vcxproj">
+        <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+        <OutputItemType>Content</OutputItemType>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </ProjectReference>
     </ItemGroup>
 
     <ItemGroup>
       <Reference Include="System.Management" />
     </ItemGroup>
+  
 </Project>

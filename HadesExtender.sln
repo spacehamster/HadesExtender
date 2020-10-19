@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HadesExtender", "HadesExtender\HadesExtender.csproj", "{518C83DF-C74E-4AD3-8A14-B4EA9C636CF2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HadesExtender", "HadesExtender\HadesExtender.csproj", "{518C83DF-C74E-4AD3-8A14-B4EA9C636CF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HadesExtender.Client", "HadesExtender.Client\HadesExtender.Client.csproj", "{CCF692AC-723D-4E90-86C8-66CDD6FD4027}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HadesExtender.Client", "HadesExtender.Client\HadesExtender.Client.csproj", "{CCF692AC-723D-4E90-86C8-66CDD6FD4027}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LuaHelper", "LuaHelper\LuaHelper.vcxproj", "{21769432-61E2-4C89-9CCF-A0CC465BB8D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{518C83DF-C74E-4AD3-8A14-B4EA9C636CF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -44,5 +43,21 @@ Global
 		{CCF692AC-723D-4E90-86C8-66CDD6FD4027}.Release|x64.Build.0 = Release|Any CPU
 		{CCF692AC-723D-4E90-86C8-66CDD6FD4027}.Release|x86.ActiveCfg = Release|Any CPU
 		{CCF692AC-723D-4E90-86C8-66CDD6FD4027}.Release|x86.Build.0 = Release|Any CPU
+		{21769432-61E2-4C89-9CCF-A0CC465BB8D6}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{21769432-61E2-4C89-9CCF-A0CC465BB8D6}.Debug|x64.ActiveCfg = Debug|x64
+		{21769432-61E2-4C89-9CCF-A0CC465BB8D6}.Debug|x64.Build.0 = Debug|x64
+		{21769432-61E2-4C89-9CCF-A0CC465BB8D6}.Debug|x86.ActiveCfg = Debug|Win32
+		{21769432-61E2-4C89-9CCF-A0CC465BB8D6}.Debug|x86.Build.0 = Debug|Win32
+		{21769432-61E2-4C89-9CCF-A0CC465BB8D6}.Release|Any CPU.ActiveCfg = Release|Win32
+		{21769432-61E2-4C89-9CCF-A0CC465BB8D6}.Release|x64.ActiveCfg = Release|x64
+		{21769432-61E2-4C89-9CCF-A0CC465BB8D6}.Release|x64.Build.0 = Release|x64
+		{21769432-61E2-4C89-9CCF-A0CC465BB8D6}.Release|x86.ActiveCfg = Release|Win32
+		{21769432-61E2-4C89-9CCF-A0CC465BB8D6}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CA25824C-C95B-49E5-B0C5-5303571F10C6}
 	EndGlobalSection
 EndGlobal
