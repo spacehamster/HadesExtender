@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
@@ -22,14 +23,24 @@ namespace HadesExtender
         {
             Util.LoadExtenderLibrary("LuaHelper.dll");
             var helperModule = Util.GetModule("LuaHelper.dll");
-            var helperResolver = new DbgHelpSymbolResolver(helperModule);
+            var helperResolver = new ExportResolver(helperModule);
             var symbols = helperResolver.FindSymbolsMatching(new Regex("lua*")).ToArray();
             if (symbols.Length == 0)
             {
                 throw new UnresolvedSymbolException("Could not find LuaHelper symbols");
             }
+            var toSkip = new HashSet<string>()
+            {
+                "luaL_checkudata",
+                "luaL_execresult",
+                "luaL_file"
+            };
             var addresses = symbols
-                .Select(name => engineResolver.Resolve(name))
+                .Select(name =>
+                {
+                    engineResolver.TryResolve(name, out var result);
+                    return result;
+                })
                 .ToArray();
             InitProxy(symbols, addresses, symbols.Length);
             luaopen_package = helperResolver.Resolve("luaopen_package");
