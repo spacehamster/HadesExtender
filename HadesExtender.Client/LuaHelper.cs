@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
@@ -35,6 +36,11 @@ namespace HadesExtender
                 "luaL_execresult",
                 "luaL_file"
             };
+            var engineSymbols = engineResolver.FindSymbolsMatching(new Regex("lua*"));
+            File.WriteAllLines("engine_symbols.txt", engineSymbols);
+            var missingSymbols = symbols.
+                Where(name => !engineResolver.TryResolve(name, out var _));
+            File.WriteAllLines("missing_symbols.txt", missingSymbols);
             var addresses = symbols
                 .Select(name =>
                 {

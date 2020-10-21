@@ -40,7 +40,7 @@ namespace HadesExtender
         {
             AttachToParentConsole();
         }
-        
+
         public bool Is64Bit => IntPtr.Size == 8;
 
         [SuppressMessage("Style", "IDE0060", Justification = "Required by EasyHook")]
@@ -57,17 +57,15 @@ namespace HadesExtender
                 if (Is64Bit)
                 {
                     Kernel32.LoadLibrary("EngineWin64s.dll");
-                } else
+                }
+                else
                 {
                     Kernel32.LoadLibrary("EngineWin32s.dll");
                 }
-
                 foreach (ProcessModule module in Process.GetCurrentProcess().Modules)
                 {
                     Console.WriteLine($"Module: {module.ModuleName}");
                 }
-                Console.WriteLine();
-
                 module = GetEngineModule();
                 resolver = new DiaSymbolResolver(module);
                 PdbSymbolImporter.ImportSymbols(resolver);

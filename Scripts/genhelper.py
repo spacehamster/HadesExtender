@@ -5,7 +5,19 @@ import re
 def merge_tokens(template, tokens):
     repl = lambda matchobj : tokens[matchobj.group(1)]
     return re.sub(r"\$(\w+)\$", repl, template)
-    
+def parse_def_file(defFilePath):
+    is_proxy_section = False
+    result = []
+    with open(defFilePath, "r", encoding="utf8") as defFile:
+        for line in defFile.readlines():
+            line = line.strip()
+            if line == '; PROXY':
+                is_proxy_section = True
+            elif line.startswith(";"):
+                is_proxy_section = False
+            elif is_proxy_section:
+                result.append(line)
+    return result
 print("Generating proxy template...")
 parser = argparse.ArgumentParser(description='Generate proxy calls.')
 parser.add_argument('-projectPath', required=True)
@@ -23,7 +35,7 @@ if arch == "64":
     ptrType = "QWORD"
 
 defFilePath = os.path.join(projectPath, "dll.def")
-defFile = open(defFilePath, "r", encoding="utf8").readlines()[1:]
+defFile = parse_def_file(defFilePath)
 sbDefs = ""
 sbVariables = ""
 sbJmps = ""
