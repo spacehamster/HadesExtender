@@ -40,6 +40,30 @@ namespace HadesExtender
             }
         }
 
+        public void LoadFile(string filePath)
+        {
+            if (LuaState == null || LuaState->state == IntPtr.Zero) throw new Exception("LuaState is null");
+            var oldTop = lua_gettop(LuaState->state);
+            try
+            {
+                if (luaL_loadfilex(LuaState->state, filePath, null) != 0)
+                {
+                    PrintError();
+                    return;
+                }
+                var result = lua_pcallk(LuaState->state, 0, LuaMultiRet, 0, 0, IntPtr.Zero);
+                if (result != ResultCode.OK)
+                {
+                    PrintError(); // pcall failed
+                    return;
+                }
+            }
+            finally
+            {
+                lua_settop(LuaState->state, oldTop);
+            }
+        }
+
         public void Eval(string code)
         {
             if (LuaState == null || LuaState->state == IntPtr.Zero) throw new Exception("LuaState is null");

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HadesExtender
 {
@@ -30,5 +26,7 @@ namespace HadesExtender
             var assemblyDir = Path.GetDirectoryName(assemblyPath);
             Kernel32.LoadLibrary(Path.Combine(assemblyDir, name));
         }
+
+        public static string ExtenderDirectory => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
     }
 }

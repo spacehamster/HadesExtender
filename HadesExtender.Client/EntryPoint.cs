@@ -150,7 +150,6 @@ namespace HadesExtender
 
                 Console.WriteLine($"InitLua End");
                 scriptManager.Init();
-                LuaHelper.OpenLibraries(scriptManager.State);
             }
             catch (Exception ex)
             {
@@ -170,6 +169,7 @@ namespace HadesExtender
                 Console.WriteLine($"ScreenManagerUpdate: {delta}");
                 ScreenManagerUpdateCount++;
             }
+            scriptManager.Update();
         }
     }
 }
