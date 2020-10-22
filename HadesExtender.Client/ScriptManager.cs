@@ -1,12 +1,15 @@
-﻿using System;
+﻿using Reloaded.Hooks;
+using System;
+using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
-using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 namespace HadesExtender
 {
     public unsafe class ScriptManager
     {
+        //TODO: Make config
+        const bool CustomLuaRuntime = true;
         SymbolResolver Resolver;
         public Lua lua;
         delegate void LuaFunc(LuaState L);
@@ -18,16 +21,48 @@ namespace HadesExtender
             Resolver = resolver;
             luaInterface = resolver.Resolve<LuaInterface>("?LUA_INTERFACE@ScriptManager@sgg@@2ULua@@A");
             lua = new Lua(resolver, luaInterface);
+            if (CustomLuaRuntime)
+            {
+                LoadCustomRuntime(resolver);
+            }
         }
+        static Dictionary<string, object> luahooks = new Dictionary<string, object>();
+        static void LoadCustomRuntime(SymbolResolver resolver)
+        {
+            Kernel32.LoadLibrary(Path.Combine(Util.ExtenderDirectory, "Lua.dll"));
+            var luaModule = Util.GetModule("Lua.dll");
+            var luaResolver = new DiaSymbolResolver(luaModule);
+            var patten = new Regex("lua*");
 
+            foreach (var symbol in resolver.FindSymbolsMatching(patten))
+            {
+                if (!luaResolver.TryResolve(symbol, out var target))
+                {
+                    Console.WriteLine($"Could not find symbol {symbol} in lua.dll");
+                    continue;
+                }
+
+                var source = resolver.Resolve(symbol);
+                var asm = new string[] {
+                    $"use64",
+                    $"jmp QWORD {target.ToInt64()}"
+                };
+                var hook = new AsmHook(asm, source.ToInt64(), Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate();
+                luahooks[symbol] = hook;
+                Console.WriteLine($"hooked lua function {symbol}");
+            }
+
+        }
         public void Init()
         {
             Console.WriteLine("Registered TestLog function");
             lua.RegisterFunction<LuaFunc>("TestLog", TestLog);
             Console.WriteLine("Registered TesValue global");
             lua.SetGlobal("TestValue", (double)5);
-
-            LuaHelper.OpenLibraries(State);
+            if (!CustomLuaRuntime)
+            {
+                LuaHelper.OpenLibraries(State);
+            }
             var debugDir = Environment.GetEnvironmentVariable("HadesExtenderDebugDirectory");
             if (debugDir != null)
             {

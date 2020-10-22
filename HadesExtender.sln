@@ -4,10 +4,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HadesExtender", "HadesExtender\HadesExtender.csproj", "{518C83DF-C74E-4AD3-8A14-B4EA9C636CF2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85} = {B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HadesExtender.Client", "HadesExtender.Client\HadesExtender.Client.csproj", "{CCF692AC-723D-4E90-86C8-66CDD6FD4027}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LuaHelper", "LuaHelper\LuaHelper.vcxproj", "{21769432-61E2-4C89-9CCF-A0CC465BB8D6}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lua", "Lua\Lua.vcxproj", "{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +58,16 @@ Global
 		{21769432-61E2-4C89-9CCF-A0CC465BB8D6}.Release|x64.Build.0 = Release|x64
 		{21769432-61E2-4C89-9CCF-A0CC465BB8D6}.Release|x86.ActiveCfg = Release|Win32
 		{21769432-61E2-4C89-9CCF-A0CC465BB8D6}.Release|x86.Build.0 = Release|Win32
+		{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}.Debug|x64.ActiveCfg = Debug|x64
+		{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}.Debug|x64.Build.0 = Debug|x64
+		{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}.Debug|x86.ActiveCfg = Debug|Win32
+		{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}.Debug|x86.Build.0 = Debug|Win32
+		{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}.Release|Any CPU.ActiveCfg = Release|Win32
+		{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}.Release|x64.ActiveCfg = Release|x64
+		{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}.Release|x64.Build.0 = Release|x64
+		{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}.Release|x86.ActiveCfg = Release|Win32
+		{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
