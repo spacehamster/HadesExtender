@@ -12,4 +12,8 @@
     </ItemGroup>
     
     <Import Project="../Dia2Lib/Dia2Lib.props" />
+    
+    <ItemGroup>
+      <NativeLibs Remove="CustomLuaRuntimeManager.cs" />
+    </ItemGroup>
 </Project>

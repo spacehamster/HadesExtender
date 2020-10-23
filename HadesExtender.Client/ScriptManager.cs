@@ -1,8 +1,11 @@
-﻿using Reloaded.Hooks;
+﻿using EasyHook;
+using Reloaded.Hooks;
+using Reloaded.Hooks.Tools;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace HadesExtender
@@ -16,6 +19,7 @@ namespace HadesExtender
         delegate void LuaFunc(LuaState L);
         LuaInterface* luaInterface;
         public LuaState State => luaInterface->state;
+        CustomLuaRuntimeManager customRuntime;
         public ScriptManager(SymbolResolver resolver)
         {
             Console.WriteLine("Initializing ScriptManager");
@@ -24,36 +28,11 @@ namespace HadesExtender
             lua = new Lua(resolver, luaInterface);
             if (CustomLuaRuntime)
             {
-                LoadCustomRuntime(resolver);
+                customRuntime = new CustomLuaRuntimeManager();
+                customRuntime.Init(resolver);
             }
         }
-        static Dictionary<string, object> luahooks = new Dictionary<string, object>();
-        static void LoadCustomRuntime(SymbolResolver resolver)
-        {
-            Kernel32.LoadLibrary(Path.Combine(Util.ExtenderDirectory, "Lua.dll"));
-            var luaModule = Util.GetModule("Lua.dll");
-            var luaResolver = new DiaSymbolResolver(luaModule);
-            var patten = new Regex("lua*");
 
-            foreach (var symbol in resolver.FindSymbolsMatching(patten))
-            {
-                if (!luaResolver.TryResolve(symbol, out var target))
-                {
-                    Console.WriteLine($"Could not find symbol {symbol} in lua.dll");
-                    continue;
-                }
-
-                var source = resolver.Resolve(symbol);
-                var asm = new string[] {
-                    $"use64",
-                    $"mov rax, {target.ToInt64()}",
-                    $"jmp rax"
-                };
-                var hook = new AsmHook(asm, source.ToInt64(), Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate();
-                luahooks[symbol] = hook;
-                Console.WriteLine($"hooked lua function {symbol}");
-            }
-        }
         public void Init()
         {
             Console.WriteLine("Registered TestLog function");
