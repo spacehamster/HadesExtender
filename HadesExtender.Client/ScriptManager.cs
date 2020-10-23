@@ -1,6 +1,7 @@
 ﻿using Reloaded.Hooks;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -45,13 +46,13 @@ namespace HadesExtender
                 var source = resolver.Resolve(symbol);
                 var asm = new string[] {
                     $"use64",
-                    $"jmp QWORD {target.ToInt64()}"
+                    $"mov rax, {target.ToInt64()}",
+                    $"jmp rax"
                 };
                 var hook = new AsmHook(asm, source.ToInt64(), Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate();
                 luahooks[symbol] = hook;
                 Console.WriteLine($"hooked lua function {symbol}");
             }
-
         }
         public void Init()
         {
