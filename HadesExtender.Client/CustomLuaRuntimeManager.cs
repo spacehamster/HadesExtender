@@ -1,5 +1,7 @@
 ﻿using EasyHook;
 using Reloaded.Hooks;
+using Reloaded.Hooks.Definitions.Enums;
+using Reloaded.Hooks.Tools;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -51,18 +53,11 @@ namespace HadesExtender
                 }
                 else
                 {
-                    /*TODO: exception from Utilities.GetAbsoluteJumpMnemonics(target, is64bit:true)
-                    System.NullReferenceException: Object reference not set to an instance of an object.
-                       at System.SpanHelpers.CopyTo[T](T & dst, Int32 dstLength, T & src, Int32 srcLength)
-                       at System.Span`1.TryCopyTo(Span`1 destination)
-                       at Reloaded.Hooks.Internal.Patch.ApplyUnsafe()
-                       at Reloaded.Hooks.AsmHook.Activate() */
                     var asm = new string[] {
                         $"use64",
-                        $"mov rax, {target.ToInt64()}",
-                        $"jmp rax",
+                        Utilities.GetAbsoluteJumpMnemonics(target, is64bit:true)
                     };
-                    var hook = new AsmHook(asm, source.ToInt64(), Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate();
+                    var hook = Util.HookSafe(asm, source.ToInt64(), AsmHookBehaviour.DoNotExecuteOriginal).Activate();
                     luahooks[symbol] = hook;
                     sw.WriteLine($"hooked lua function {symbol}");
                 }
@@ -90,10 +85,9 @@ namespace HadesExtender
             var asm = new string[] {
                         $"use64",
                         $"mov ecx, {unresolvedSymbols.Count}",
-                        $"mov rax, {OnErrorWrapper.WrapperPointer}",
-                        $"jmp rax",
+                        Utilities.GetAbsoluteJumpMnemonics(OnErrorWrapper.WrapperPointer, is64bit:true)
                     };
-            var hook = new AsmHook(asm, source.ToInt64(), Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate();
+            var hook = Util.HookSafe(asm, source.ToInt64(), AsmHookBehaviour.DoNotExecuteOriginal).Activate();
             luahooks[symbol] = hook;
             unresolvedSymbols.Add(symbol);
         }
