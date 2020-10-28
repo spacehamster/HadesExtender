@@ -612,5 +612,10 @@ namespace HadesExtender
         public unsafe delegate void LuaLWhereDelegate(LuaState L, int lvl);
         [PdbSymbol]
         public static LuaLWhereDelegate luaL_where = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate int LuaOpenDebugDelegate(LuaState L);
+        [PdbSymbol]
+        public static LuaOpenDebugDelegate luaopen_debug = null;
     }
 }

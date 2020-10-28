@@ -19,17 +19,23 @@ namespace HadesExtender
         delegate void LuaFunc(LuaState L);
         LuaInterface* luaInterface;
         public LuaState State => luaInterface->state;
+        bool* enableMessageHook;
+        IntPtr l_msghandler;
+        IntPtr l_panic;
         CustomLuaRuntimeManager customRuntime;
         public ScriptManager(SymbolResolver resolver)
         {
             Console.WriteLine("Initializing ScriptManager");
             Resolver = resolver;
             luaInterface = resolver.Resolve<LuaInterface>("?LUA_INTERFACE@ScriptManager@sgg@@2ULua@@A");
+            enableMessageHook = resolver.Resolve<bool>("?EnableLuaMessageHook@ConfigOptions@sgg@@2_NA");
+            l_msghandler = resolver.Resolve("l_msghandler");
+            l_panic = resolver.Resolve("l_panic");
             lua = new Lua(resolver, luaInterface);
             if (CustomLuaRuntime)
             {
                 customRuntime = new CustomLuaRuntimeManager();
-                customRuntime.Init(resolver);
+                customRuntime.Init(resolver, luaInterface, l_msghandler, l_panic, enableMessageHook);
             }
         }
 

@@ -40,13 +40,24 @@ namespace HadesExtender
         {
             if (cache.TryGetValue(name, out IntPtr address))
                 return address;
-
+            IDiaEnumSymbols symbols;
             session.Value.globalScope.findChildren(
                 SymTagEnum.SymTagPublicSymbol,
                 name,
                 0,
-                out IDiaEnumSymbols symbols
+                out symbols
             );
+
+
+            if (symbols.count == 0)
+            {
+                session.Value.globalScope.findChildren(
+                    SymTagEnum.SymTagFunction,
+                    name,
+                    0,
+                    out symbols
+                );
+            }
 
             if (symbols.count == 0)
                 return IntPtr.Zero;

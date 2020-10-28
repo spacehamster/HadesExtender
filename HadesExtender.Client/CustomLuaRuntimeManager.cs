@@ -1,16 +1,12 @@
 ﻿using EasyHook;
-using Reloaded.Hooks;
 using Reloaded.Hooks.Definitions.Enums;
 using Reloaded.Hooks.Tools;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace HadesExtender
 {
@@ -18,16 +14,33 @@ namespace HadesExtender
     {
         List<string> unresolvedSymbols = new List<string>();
         Dictionary<string, object> luahooks = new Dictionary<string, object>();
-        public void Init(SymbolResolver resolver)
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate LuaState LuaLNewStateDelegate();
+        public static LuaLNewStateDelegate luaL_newstate = null;
+
+
+        public unsafe void Init(SymbolResolver resolver, LuaInterface* luaInterface, IntPtr l_msghandler, IntPtr l_panic, bool* enableMessageHook)
+        {
+            CloseLua(luaInterface);
+            HookLuaApi(resolver);
+            OpenLua(luaInterface, l_msghandler, l_panic, enableMessageHook);
+        }
+
+        private void HookLuaApi(SymbolResolver resolver)
         {
             Kernel32.LoadLibrary(Path.Combine(Util.ExtenderDirectory, "Lua.dll"));
             var luaModule = Util.GetModule("Lua.dll");
             var luaResolver = new DiaSymbolResolver(luaModule);
+            luaL_newstate = luaResolver.ResolveFunction<LuaLNewStateDelegate>("luaL_newstate");
             using var sw = new StreamWriter("PatchLog.txt");
             var useEasyhook = false;
-            //Debugger.Launch();
+            var ignoreSymbols = new string[] {
+                "luaopen_debug"
+            };
             var symbols = resolver.FindSymbolsMatching(new Regex("lua*"))
-                .Concat(resolver.FindSymbolsMatching(new Regex(@"\?lua*")));
+                .Concat(resolver.FindSymbolsMatching(new Regex(@"\?lua*")))
+                .Where(symbol => !ignoreSymbols.Contains(symbol));
             foreach (var symbol in symbols)
             {
                 var source = resolver.Resolve(symbol);
@@ -61,6 +74,38 @@ namespace HadesExtender
                     luahooks[symbol] = hook;
                     sw.WriteLine($"hooked lua function {symbol}");
                 }
+            }
+        }
+
+        private unsafe void CloseLua(LuaInterface* luaInterface)
+        {
+            Console.WriteLine($"Closing lua.");
+            if (luaInterface->destroyed == false)
+            {
+                LuaBindings.lua_close(luaInterface->state);
+                luaInterface->state = IntPtr.Zero;
+                luaInterface->destroyed = true;
+                luaInterface->msghander = 0;
+            }
+        }
+
+        private unsafe void OpenLua(LuaInterface* luaInterface, IntPtr l_msghandler, IntPtr l_panic, bool* enableMessageHook)
+        {
+            Console.WriteLine($"Opening lua. Message hooks enabled={*enableMessageHook}");
+            luaInterface->state = CustomLuaRuntimeManager.luaL_newstate();
+            luaInterface->destroyed = false;
+            if (!*enableMessageHook)
+            {
+                LuaBindings.luaL_openlibs(luaInterface->state);
+            }
+            else
+            {
+                LuaBindings.lua_pushcclosure(luaInterface->state, l_msghandler, 0);
+                var top = LuaBindings.lua_gettop(luaInterface->state);
+                luaInterface->msghander = top;
+                LuaBindings.lua_atpanic(luaInterface->state, l_panic);
+                LuaBindings.luaL_openlibs(luaInterface->state);
+                LuaBindings.luaopen_debug(luaInterface->state);
             }
         }
 
