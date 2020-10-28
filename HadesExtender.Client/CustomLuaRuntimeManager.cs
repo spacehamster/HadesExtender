@@ -72,7 +72,7 @@ namespace HadesExtender
                     };
                     var hook = Util.HookSafe(asm, source.ToInt64(), AsmHookBehaviour.DoNotExecuteOriginal).Activate();
                     luahooks[symbol] = hook;
-                    sw.WriteLine($"hooked lua function {symbol}");
+                    sw.WriteLine($"hooked lua function {symbol}. 0x{source.ToInt64():X8} -> 0x{target.ToInt64():X8}");
                 }
             }
         }
