@@ -23,6 +23,7 @@ namespace HadesExtender
         IntPtr l_msghandler;
         IntPtr l_panic;
         CustomLuaRuntimeManager customRuntime;
+        bool debugEnabled;
         public ScriptManager(SymbolResolver resolver)
         {
             Console.WriteLine("Initializing ScriptManager");
@@ -61,6 +62,7 @@ namespace HadesExtender
                 lua.Eval(string.Format(@"package.cpath = package.cpath .. "";{0}""",
                     $@"{luadir}\lib\lua\5.2\?.dll".Replace(@"\", @"\\")));
                 if (File.Exists($"{debugDir}/Debug.lua")) lua.LoadFile($"{debugDir}/Debug.lua");
+                debugEnabled = true;
             }
         }
         public void TestLog(LuaState L)
@@ -87,8 +89,11 @@ namespace HadesExtender
 
         public void Update()
         {
-            LuaBindings.lua_getglobal(State, "DebugUpdate");
-            LuaBindings.lua_pcallk(State, 0, 0, 0, 0, IntPtr.Zero);
+            if (debugEnabled)
+            {
+                LuaBindings.lua_getglobal(State, "DebugUpdate");
+                LuaBindings.lua_pcallk(State, 0, 0, 0, 0, IntPtr.Zero);
+            }
         }
     }
 }
