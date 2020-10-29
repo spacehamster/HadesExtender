@@ -19,6 +19,9 @@ namespace HadesExtender
         public delegate LuaState LuaLNewStateDelegate();
         public static LuaLNewStateDelegate luaL_newstate = null;
 
+        CFunction luaopen_package;
+        CFunction luaopen_io;
+        CFunction luaopen_os;
 
         public unsafe void Init(SymbolResolver resolver, LuaInterface* luaInterface, IntPtr l_msghandler, IntPtr l_panic, bool* enableMessageHook)
         {
@@ -33,6 +36,11 @@ namespace HadesExtender
             var luaModule = Util.GetModule("Lua.dll");
             var luaResolver = new DiaSymbolResolver(luaModule);
             luaL_newstate = luaResolver.ResolveFunction<LuaLNewStateDelegate>("luaL_newstate");
+            luaopen_package = luaResolver.Resolve("luaopen_package");
+            luaopen_io = luaResolver.Resolve("luaopen_io");
+            luaopen_os = luaResolver.Resolve("luaopen_os");
+
+
             using var sw = new StreamWriter("PatchLog.txt");
             var useEasyhook = false;
             /* do not hook luaL_openlibs so that the engine will load its own implementation of 
@@ -84,6 +92,16 @@ namespace HadesExtender
                     sw.WriteLine($"hooked lua function {symbol}. 0x{source.ToInt64():X8} -> 0x{target.ToInt64():X8}");
                 }
             }
+        }
+
+        public void OpenLibraries(LuaState state)
+        {
+            LuaBindings.luaL_requiref(state, "package", luaopen_package, 1);
+            LuaBindingMacros.lua_pop(state, 1);
+            LuaBindings.luaL_requiref(state, "io", luaopen_io, 1);
+            LuaBindingMacros.lua_pop(state, 1);
+            LuaBindings.luaL_requiref(state, "os", luaopen_os, 1);
+            LuaBindingMacros.lua_pop(state, 1);
         }
 
         private unsafe void CloseLua(LuaInterface* luaInterface)

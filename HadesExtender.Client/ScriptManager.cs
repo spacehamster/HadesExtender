@@ -49,6 +49,9 @@ namespace HadesExtender
             if (!CustomLuaRuntime)
             {
                 LuaHelper.OpenLibraries(State);
+            } else
+            {
+                customRuntime.OpenLibraries(State);
             }
             var debugDir = Environment.GetEnvironmentVariable("HadesExtenderDebugDirectory");
             if (debugDir != null)
@@ -58,7 +61,7 @@ namespace HadesExtender
                 lua.Eval(string.Format(@"package.path = package.path .. "";{0}""",
                     $@"{debugDir}\?.lua".Replace(@"\", @"\\")));
                 lua.Eval(string.Format(@"package.path = package.path .. "";{0}""",
-                    $@"{debugDir}\share\lua\5.2\?.lua".Replace(@"\", @"\\")));
+                    $@"{luadir}\share\lua\5.2\?.lua".Replace(@"\", @"\\")));
                 lua.Eval(string.Format(@"package.cpath = package.cpath .. "";{0}""",
                     $@"{luadir}\lib\lua\5.2\?.dll".Replace(@"\", @"\\")));
                 if (File.Exists($"{debugDir}/Debug.lua")) lua.LoadFile($"{debugDir}/Debug.lua");
