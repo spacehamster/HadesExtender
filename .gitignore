@@ -7,3 +7,4 @@ Dia2Lib/*.dll
 Dia2Lib/*.tlb
 Debug/
 Release/
+packages/

@@ -14,6 +14,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LuaHelper", "LuaHelper\LuaH
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lua", "Lua\Lua.vcxproj", "{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtenderAsmHook", "ExtenderAsmHook\ExtenderAsmHook.csproj", "{BC4E3CC9-D232-4EDF-AD7A-4ECFEBB63DCE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,18 @@ Global
 		{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}.Release|x64.Build.0 = Release|x64
 		{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}.Release|x86.ActiveCfg = Release|Win32
 		{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}.Release|x86.Build.0 = Release|Win32
+		{BC4E3CC9-D232-4EDF-AD7A-4ECFEBB63DCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC4E3CC9-D232-4EDF-AD7A-4ECFEBB63DCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC4E3CC9-D232-4EDF-AD7A-4ECFEBB63DCE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BC4E3CC9-D232-4EDF-AD7A-4ECFEBB63DCE}.Debug|x64.Build.0 = Debug|Any CPU
+		{BC4E3CC9-D232-4EDF-AD7A-4ECFEBB63DCE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BC4E3CC9-D232-4EDF-AD7A-4ECFEBB63DCE}.Debug|x86.Build.0 = Debug|Any CPU
+		{BC4E3CC9-D232-4EDF-AD7A-4ECFEBB63DCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC4E3CC9-D232-4EDF-AD7A-4ECFEBB63DCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC4E3CC9-D232-4EDF-AD7A-4ECFEBB63DCE}.Release|x64.ActiveCfg = Release|Any CPU
+		{BC4E3CC9-D232-4EDF-AD7A-4ECFEBB63DCE}.Release|x64.Build.0 = Release|Any CPU
+		{BC4E3CC9-D232-4EDF-AD7A-4ECFEBB63DCE}.Release|x86.ActiveCfg = Release|Any CPU
+		{BC4E3CC9-D232-4EDF-AD7A-4ECFEBB63DCE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

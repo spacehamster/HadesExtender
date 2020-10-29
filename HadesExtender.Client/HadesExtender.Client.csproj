@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <RootNamespace>HadesExtender</RootNamespace>
         <TargetFramework>net471</TargetFramework>
@@ -15,5 +15,9 @@
     
     <ItemGroup>
       <NativeLibs Remove="CustomLuaRuntimeManager.cs" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\ExtenderAsmHook\ExtenderAsmHook.csproj" />
     </ItemGroup>
 </Project>
