@@ -35,8 +35,17 @@ namespace HadesExtender
             luaL_newstate = luaResolver.ResolveFunction<LuaLNewStateDelegate>("luaL_newstate");
             using var sw = new StreamWriter("PatchLog.txt");
             var useEasyhook = false;
+            /* do not hook luaL_openlibs so that the engine will load its own implementation of 
+             * luaopen_debug, luaopen_luabins and luaopen_utf8 
+             */
             var ignoreSymbols = new string[] {
-                "luaopen_debug"
+                "luaopen_debug",
+                "luaopen_luabins",
+                "luaopen_utf8",
+                "luaL_openlibs",
+                "?luabins_load@@YAHPEAUlua_State@@PEBE_KPEAH@Z",
+                "?luabins_save@@YAHPEAUlua_State@@HH@Z",
+                "?luaO_log2@@YAHI@Z" //No calls to vm, used by luabins
             };
             var symbols = resolver.FindSymbolsMatching(new Regex("lua*"))
                 .Concat(resolver.FindSymbolsMatching(new Regex(@"\?lua*")))
@@ -122,7 +131,7 @@ namespace HadesExtender
 
         public void RegisterErrorHook(string symbol, IntPtr source)
         {
-            if(OnErrorWrapper == null)
+            if (OnErrorWrapper == null)
             {
                 OnErrorWrapper = new Reloaded.Hooks.X64.ReverseWrapper<OnErrorDelegate>(OnError);
             }
