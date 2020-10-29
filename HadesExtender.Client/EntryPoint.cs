@@ -48,6 +48,14 @@ namespace HadesExtender
         {
             try
             {
+                var args = Environment.GetCommandLineArgs();
+                foreach(var arg in args)
+                {
+                    if(arg == "--launch-debugger")
+                    {
+                        Debugger.Launch();
+                    }
+                }
                 var kernel = GetKernelModule().BaseAddress;
                 var loadLibraryAFunc = Kernel32.GetProcAddress(kernel, "LoadLibraryA");
                 var hook = LocalHook.Create(loadLibraryAFunc, new LoadLibraryADelegate(LoadLibraryHook), null);
