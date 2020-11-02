@@ -1,4 +1,5 @@
 ﻿using EasyHook;
+using Reloaded.Hooks;
 using Reloaded.Hooks.Definitions.Enums;
 using Reloaded.Hooks.Tools;
 using System;
@@ -87,7 +88,7 @@ namespace HadesExtender
                         $"use64",
                         Utilities.GetAbsoluteJumpMnemonics(target, is64bit:true)
                     };
-                    var hook = Util.HookSafe(asm, source.ToInt64(), AsmHookBehaviour.DoNotExecuteOriginal).Activate();
+                    var hook = new AsmHook(asm, source.ToInt64(), AsmHookBehaviour.DoNotExecuteOriginal).Activate();
                     luahooks[symbol] = hook;
                     sw.WriteLine($"hooked lua function {symbol}. 0x{source.ToInt64():X8} -> 0x{target.ToInt64():X8}");
                 }
@@ -159,7 +160,7 @@ namespace HadesExtender
                         $"mov ecx, {unresolvedSymbols.Count}",
                         Utilities.GetAbsoluteJumpMnemonics(OnErrorWrapper.WrapperPointer, is64bit:true)
                     };
-            var hook = Util.HookSafe(asm, source.ToInt64(), AsmHookBehaviour.DoNotExecuteOriginal).Activate();
+            var hook = new AsmHook(asm, source.ToInt64(), AsmHookBehaviour.DoNotExecuteOriginal).Activate();
             luahooks[symbol] = hook;
             unresolvedSymbols.Add(symbol);
         }
