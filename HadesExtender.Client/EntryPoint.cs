@@ -54,6 +54,7 @@ namespace HadesExtender
                     if(arg == "--launch-debugger")
                     {
                         Debugger.Launch();
+                        SEHExceptionHandler.Register();
                     }
                 }
                 var kernel = GetKernelModule().BaseAddress;
