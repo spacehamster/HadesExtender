@@ -91,7 +91,7 @@ namespace HadesExtender
         public static LuaGetHookMask lua_gethookmask = null;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate int LuaGetInfoDelegate(LuaState L, [MarshalAs(UnmanagedType.LPStr)] string what, IntPtr ar);
+        public delegate int LuaGetInfoDelegate(LuaState L, [MarshalAs(UnmanagedType.LPStr)] string what, ref LuaDebug ar);
         [PdbSymbol]
         public static LuaGetInfoDelegate lua_getinfo = null;
 
@@ -107,7 +107,7 @@ namespace HadesExtender
         public static LuaGetMetaTable lua_getmetatable = null;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate int LuaGetStack(LuaState L, int level, IntPtr ar);
+        public delegate int LuaGetStack(LuaState L, int level, ref LuaDebug ar);
         [PdbSymbol]
         public static LuaGetStack lua_getstack = null;
 

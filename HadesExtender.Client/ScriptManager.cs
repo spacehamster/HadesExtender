@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace HadesExtender
@@ -17,8 +19,8 @@ namespace HadesExtender
         SymbolResolver Resolver;
         public Lua lua;
         delegate void LuaFunc(LuaState L);
-        LuaInterface* luaInterface;
-        public LuaState State => luaInterface->state;
+        static LuaInterface* luaInterface;
+        public static LuaState State => luaInterface->state;
         bool* enableMessageHook;
         IntPtr l_msghandler;
         IntPtr l_panic;
@@ -98,5 +100,34 @@ namespace HadesExtender
                 LuaBindings.lua_pcallk(State, 0, 0, 0, 0, IntPtr.Zero);
             }
         }
+
+        public static string StackTrace()
+        {
+            if(luaInterface == null || luaInterface->state == IntPtr.Zero)
+            {
+                return "Lua is null";
+            }
+            if (luaInterface->destroyed)
+            {
+                return "Lua is destroyed";
+            }
+            var sb = new StringBuilder();
+            LuaDebug info = new LuaDebug();
+            int level = 0;
+            while (LuaBindings.lua_getstack(State, level, ref info) != 0)
+            {
+                LuaBindings.lua_getinfo(State, "nSl", ref info);
+                var short_src = Marshal.PtrToStringAnsi(new IntPtr(info.short_src));
+                var line = string.Format("  [{0}] {1}:{2} -- {3} [{4}]",
+                    level, short_src, info.currentline,
+                    (info.name != null ? info.name : "<unknown>"),
+                    info.what);
+                sb.AppendLine(line);
+                level++;
+            }
+            return sb.ToString();
+        }
+
+        public static bool LuaValid => luaInterface != null && luaInterface->destroyed == false && luaInterface->state != IntPtr.Zero;
     }
 }
