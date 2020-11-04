@@ -68,6 +68,9 @@ namespace HadesExtender
                     $@"{luadir}\lib\lua\5.2\?.dll".Replace(@"\", @"\\")));
                 if (File.Exists($"{debugDir}/Debug.lua")) lua.LoadFile($"{debugDir}/Debug.lua");
                 debugEnabled = true;
+            } else
+            {
+                Console.WriteLine("Debugging not enabled");
             }
         }
         public void TestLog(LuaState L)
@@ -96,8 +99,15 @@ namespace HadesExtender
         {
             if (debugEnabled)
             {
+                var top = LuaBindings.lua_gettop(State);
                 LuaBindings.lua_getglobal(State, "DebugUpdate");
-                LuaBindings.lua_pcallk(State, 0, 0, 0, 0, IntPtr.Zero);
+                if (LuaBindingMacros.lua_isfunction(State, -1))
+                {
+                    var result = LuaBindings.lua_pcallk(State, 0, 0, 0, 0, IntPtr.Zero);
+                } else
+                {
+                    LuaBindings.lua_settop(State, top);
+                }
             }
         }
 

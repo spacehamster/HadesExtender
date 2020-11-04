@@ -2,6 +2,7 @@
 {
     public enum LuaType
     {
+        None = -1,
         Nil = 0,
         Boolean = 1,
         LightUserData = 2,

@@ -18,8 +18,8 @@ namespace HadesExtender
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         delegate IntPtr LoadLibraryADelegate(string fileName);
 
-        [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-        delegate void ScreenManagerUpdateDelegate(IntPtr screenManager, float delta);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        delegate void ScriptManagerUpdateDelegate(float delta);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         delegate void InitLuaDelegate();
@@ -80,7 +80,7 @@ namespace HadesExtender
                 LuaHelper.InitHelper(resolver);
 
                 Hook<InitLuaDelegate>("?InitLua@ScriptManager@sgg@@SAXXZ", InitLua);
-                Hook<ScreenManagerUpdateDelegate>("?Update@ScreenManager@sgg@@QEAAXM@Z", ScreenManagerUpdate);
+                Hook<ScriptManagerUpdateDelegate>("?Update@ScriptManager@sgg@@SAXAEBM@Z", ScriptManagerUpdate);
 
                 scriptManager = new ScriptManager(resolver);
                 Console.WriteLine($"Created ScriptManager");
@@ -165,11 +165,11 @@ namespace HadesExtender
             }
         }
 
-        private void ScreenManagerUpdate(IntPtr screenManager, float delta)
+        private void ScriptManagerUpdate(float delta)
         {
             var bypass = HookRuntimeInfo.Handle.HookBypassAddress;
-            var method = Marshal.GetDelegateForFunctionPointer<ScreenManagerUpdateDelegate>(bypass);
-            method.Invoke(screenManager, delta);
+            var method = Marshal.GetDelegateForFunctionPointer<ScriptManagerUpdateDelegate>(bypass);
+            method.Invoke(delta);
             scriptManager.Update();
         }
     }
