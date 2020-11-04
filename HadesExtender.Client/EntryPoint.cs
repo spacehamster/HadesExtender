@@ -165,18 +165,11 @@ namespace HadesExtender
             }
         }
 
-        int ScreenManagerUpdateCount = 0;
         private void ScreenManagerUpdate(IntPtr screenManager, float delta)
         {
-
             var bypass = HookRuntimeInfo.Handle.HookBypassAddress;
             var method = Marshal.GetDelegateForFunctionPointer<ScreenManagerUpdateDelegate>(bypass);
             method.Invoke(screenManager, delta);
-            if (ScreenManagerUpdateCount < 10)
-            {
-                Console.WriteLine($"ScreenManagerUpdate: {delta}");
-                ScreenManagerUpdateCount++;
-            }
             scriptManager.Update();
         }
     }
