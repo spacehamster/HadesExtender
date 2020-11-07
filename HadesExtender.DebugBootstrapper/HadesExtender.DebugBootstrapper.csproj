@@ -81,16 +81,14 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HadesExtender.Client\HadesExtender.Client.csproj" />
-    <ProjectReference Include="..\LuaHelper\LuaHelper.vcxproj">
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <OutputItemType>Content</OutputItemType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <ProjectReference Include="..\HadesExtender.Client\HadesExtender.Client.csproj">
+      <Project>{CCF692AC-723D-4E90-86C8-66CDD6FD4027}</Project>
+      <Name>HadesExtender.Client</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(solutiondir)\x64\debug\lua.dll $(targetdir)\lua.dll
-copy $(solutiondir)\x64\debug\lua.pdb $(targetdir)\lua.pdb</PostBuildEvent>
+    <PostBuildEvent>cd $(TargetDir)
+$(SolutionDir)BuildAndCopyLibs.bat $(Configuration)</PostBuildEvent>
   </PropertyGroup>
 </Project>

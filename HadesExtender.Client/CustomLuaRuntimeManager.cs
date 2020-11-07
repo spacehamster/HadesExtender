@@ -93,7 +93,7 @@ namespace HadesExtender
 
         public void OpenLibraries(LuaState state)
         {
-            LuaBindings.luaL_requiref(state, "package", luaopen_package, 1);
+            LuaBindings.luaL_requiref(state, "package", luaopen_package, 1);        
             LuaBindingMacros.lua_pop(state, 1);
             LuaBindings.luaL_requiref(state, "io", luaopen_io, 1);
             LuaBindingMacros.lua_pop(state, 1);

@@ -1,0 +1,239 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build" InitialTargets="ValidateSolutionConfiguration;ValidateToolsVersions;ValidateProjects">
+  <Target Name="Publish" />
+  <Target Name="LuaModules\cjson" />
+  <Target Name="Clean" />
+  <Target Name="Build" />
+  <Target Name="Rebuild" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\SolutionFile\ImportBefore\*" Condition="'$(ImportByWildcardBeforeSolution)' != 'false' and exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\SolutionFile\ImportBefore')" />
+  <PropertyGroup Condition="'$(ImportDirectorySolutionProps)' != 'false' and '$(DirectorySolutionPropsPath)' == ''">
+    <_DirectorySolutionPropsFile Condition="'$(_DirectorySolutionPropsFile)' == ''">Directory.Solution.props</_DirectorySolutionPropsFile>
+    <_DirectorySolutionPropsBasePath Condition="'$(_DirectorySolutionPropsBasePath)' == ''">$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), '$(_DirectorySolutionPropsFile)'))</_DirectorySolutionPropsBasePath>
+    <DirectorySolutionPropsPath Condition="'$(_DirectorySolutionPropsBasePath)' != '' and '$(_DirectorySolutionPropsFile)' != ''">$([System.IO.Path]::Combine('$(_DirectorySolutionPropsBasePath)', '$(_DirectorySolutionPropsFile)'))</DirectorySolutionPropsPath>
+  </PropertyGroup>
+  <Import Project="$(DirectorySolutionPropsPath)" Condition="'$(ImportDirectorySolutionProps)' != 'false' and exists('$(DirectorySolutionPropsPath)')" />
+  <Import Project="C:\Files\Code\Hades\HadesExtenderCSharp\before.HadesExtender.sln.targets" Condition="exists('C:\Files\Code\Hades\HadesExtenderCSharp\before.HadesExtender.sln.targets')" />
+  <PropertyGroup Condition=" '$(Configuration)' == '' ">
+    <Configuration>Debug</Configuration>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == '' ">
+    <Platform>Any CPU</Platform>
+  </PropertyGroup>
+  <PropertyGroup Condition=" ('$(AspNetConfiguration)' == '') ">
+    <AspNetConfiguration>$(Configuration)</AspNetConfiguration>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SolutionDir>C:\Files\Code\Hades\HadesExtenderCSharp\</SolutionDir>
+    <SolutionExt>.sln</SolutionExt>
+    <SolutionFileName>HadesExtender.sln</SolutionFileName>
+    <SolutionName>HadesExtender</SolutionName>
+    <SolutionPath>C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender.sln</SolutionPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFrameworkVersion Condition="'$(TargetFrameworkVersion)' == '' and '$(MSBuildToolsVersion)' == '2.0'">v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion Condition="'$(TargetFrameworkVersion)' == '' and ('$(MSBuildToolsVersion)' == '3.5' or '$(MSBuildToolsVersion)' == '3.0')">v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion Condition="'$(TargetFrameworkVersion)' == '' and !('$(MSBuildToolsVersion)' == '3.5' or '$(MSBuildToolsVersion)' == '3.0' or '$(MSBuildToolsVersion)' == '2.0')">v4.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" ('$(Configuration)' == 'Debug') and ('$(Platform)' == 'Any CPU') ">
+    <CurrentSolutionConfigurationContents>
+      <SolutionConfiguration xmlns="">
+  <ProjectConfiguration Project="{518C83DF-C74E-4AD3-8A14-B4EA9C636CF2}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender\HadesExtender.csproj" BuildProjectInSolution="True">Debug|AnyCPU</ProjectConfiguration>
+  <ProjectConfiguration Project="{CCF692AC-723D-4E90-86C8-66CDD6FD4027}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender.Client\HadesExtender.Client.csproj" BuildProjectInSolution="True">Debug|AnyCPU</ProjectConfiguration>
+  <ProjectConfiguration Project="{21769432-61E2-4C89-9CCF-A0CC465BB8D6}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaHelper\LuaHelper.vcxproj" BuildProjectInSolution="False">Debug|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\Lua\Lua.vcxproj" BuildProjectInSolution="False">Debug|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{6A507DED-CB86-4B6B-97F8-352072F708CA}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender.DebugBootstrapper\HadesExtender.DebugBootstrapper.csproj" BuildProjectInSolution="True">Debug|AnyCPU</ProjectConfiguration>
+  <ProjectConfiguration Project="{9BAA2B40-7D7B-444B-AB2B-4723CF87CBD8}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\cjson.vcxproj" BuildProjectInSolution="False">Debug|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{D99ED05C-EDFC-493E-864A-62AFF0CEBD3F}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\lfs.vcxproj" BuildProjectInSolution="False">Debug|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{128E8BD0-174A-48F0-8771-92B1E8D18713}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\mime.vcxproj" BuildProjectInSolution="False">Debug|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{66E3CE14-884D-4AEA-9F20-15A0BEAF8C5A}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\socket.vcxproj" BuildProjectInSolution="False">Debug|x64</ProjectConfiguration>
+</SolutionConfiguration>
+    </CurrentSolutionConfigurationContents>
+  </PropertyGroup>
+  <ItemGroup>
+    <SolutionConfiguration Include="Debug|Any CPU">
+      <Configuration>Debug</Configuration>
+      <Platform>Any CPU</Platform>
+      <Content>
+        <SolutionConfiguration xmlns="">
+  <ProjectConfiguration Project="{518C83DF-C74E-4AD3-8A14-B4EA9C636CF2}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender\HadesExtender.csproj" BuildProjectInSolution="True">Debug|AnyCPU</ProjectConfiguration>
+  <ProjectConfiguration Project="{CCF692AC-723D-4E90-86C8-66CDD6FD4027}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender.Client\HadesExtender.Client.csproj" BuildProjectInSolution="True">Debug|AnyCPU</ProjectConfiguration>
+  <ProjectConfiguration Project="{21769432-61E2-4C89-9CCF-A0CC465BB8D6}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaHelper\LuaHelper.vcxproj" BuildProjectInSolution="False">Debug|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\Lua\Lua.vcxproj" BuildProjectInSolution="False">Debug|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{6A507DED-CB86-4B6B-97F8-352072F708CA}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender.DebugBootstrapper\HadesExtender.DebugBootstrapper.csproj" BuildProjectInSolution="True">Debug|AnyCPU</ProjectConfiguration>
+  <ProjectConfiguration Project="{9BAA2B40-7D7B-444B-AB2B-4723CF87CBD8}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\cjson.vcxproj" BuildProjectInSolution="False">Debug|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{D99ED05C-EDFC-493E-864A-62AFF0CEBD3F}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\lfs.vcxproj" BuildProjectInSolution="False">Debug|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{128E8BD0-174A-48F0-8771-92B1E8D18713}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\mime.vcxproj" BuildProjectInSolution="False">Debug|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{66E3CE14-884D-4AEA-9F20-15A0BEAF8C5A}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\socket.vcxproj" BuildProjectInSolution="False">Debug|x64</ProjectConfiguration>
+</SolutionConfiguration>
+      </Content>
+    </SolutionConfiguration>
+    <SolutionConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+      <Content>
+        <SolutionConfiguration xmlns="">
+  <ProjectConfiguration Project="{518C83DF-C74E-4AD3-8A14-B4EA9C636CF2}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender\HadesExtender.csproj" BuildProjectInSolution="True">Debug|AnyCPU<ProjectDependency Project="{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}" /></ProjectConfiguration>
+  <ProjectConfiguration Project="{CCF692AC-723D-4E90-86C8-66CDD6FD4027}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender.Client\HadesExtender.Client.csproj" BuildProjectInSolution="True">Debug|AnyCPU</ProjectConfiguration>
+  <ProjectConfiguration Project="{21769432-61E2-4C89-9CCF-A0CC465BB8D6}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaHelper\LuaHelper.vcxproj" BuildProjectInSolution="True">Debug|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\Lua\Lua.vcxproj" BuildProjectInSolution="True">Debug|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{6A507DED-CB86-4B6B-97F8-352072F708CA}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender.DebugBootstrapper\HadesExtender.DebugBootstrapper.csproj" BuildProjectInSolution="True">Debug|AnyCPU</ProjectConfiguration>
+  <ProjectConfiguration Project="{9BAA2B40-7D7B-444B-AB2B-4723CF87CBD8}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\cjson.vcxproj" BuildProjectInSolution="True">Debug|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{D99ED05C-EDFC-493E-864A-62AFF0CEBD3F}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\lfs.vcxproj" BuildProjectInSolution="True">Debug|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{128E8BD0-174A-48F0-8771-92B1E8D18713}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\mime.vcxproj" BuildProjectInSolution="True">Debug|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{66E3CE14-884D-4AEA-9F20-15A0BEAF8C5A}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\socket.vcxproj" BuildProjectInSolution="True">Debug|x64</ProjectConfiguration>
+</SolutionConfiguration>
+      </Content>
+    </SolutionConfiguration>
+    <SolutionConfiguration Include="Debug|x86">
+      <Configuration>Debug</Configuration>
+      <Platform>x86</Platform>
+      <Content>
+        <SolutionConfiguration xmlns="">
+  <ProjectConfiguration Project="{518C83DF-C74E-4AD3-8A14-B4EA9C636CF2}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender\HadesExtender.csproj" BuildProjectInSolution="True">Debug|AnyCPU<ProjectDependency Project="{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}" /></ProjectConfiguration>
+  <ProjectConfiguration Project="{CCF692AC-723D-4E90-86C8-66CDD6FD4027}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender.Client\HadesExtender.Client.csproj" BuildProjectInSolution="True">Debug|AnyCPU</ProjectConfiguration>
+  <ProjectConfiguration Project="{21769432-61E2-4C89-9CCF-A0CC465BB8D6}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaHelper\LuaHelper.vcxproj" BuildProjectInSolution="True">Debug|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\Lua\Lua.vcxproj" BuildProjectInSolution="True">Debug|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{6A507DED-CB86-4B6B-97F8-352072F708CA}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender.DebugBootstrapper\HadesExtender.DebugBootstrapper.csproj" BuildProjectInSolution="True">Debug|AnyCPU</ProjectConfiguration>
+  <ProjectConfiguration Project="{9BAA2B40-7D7B-444B-AB2B-4723CF87CBD8}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\cjson.vcxproj" BuildProjectInSolution="True">Debug|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{D99ED05C-EDFC-493E-864A-62AFF0CEBD3F}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\lfs.vcxproj" BuildProjectInSolution="True">Debug|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{128E8BD0-174A-48F0-8771-92B1E8D18713}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\mime.vcxproj" BuildProjectInSolution="True">Debug|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{66E3CE14-884D-4AEA-9F20-15A0BEAF8C5A}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\socket.vcxproj" BuildProjectInSolution="True">Debug|Win32</ProjectConfiguration>
+</SolutionConfiguration>
+      </Content>
+    </SolutionConfiguration>
+    <SolutionConfiguration Include="Release|Any CPU">
+      <Configuration>Release</Configuration>
+      <Platform>Any CPU</Platform>
+      <Content>
+        <SolutionConfiguration xmlns="">
+  <ProjectConfiguration Project="{518C83DF-C74E-4AD3-8A14-B4EA9C636CF2}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender\HadesExtender.csproj" BuildProjectInSolution="True">Release|AnyCPU</ProjectConfiguration>
+  <ProjectConfiguration Project="{CCF692AC-723D-4E90-86C8-66CDD6FD4027}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender.Client\HadesExtender.Client.csproj" BuildProjectInSolution="True">Release|AnyCPU</ProjectConfiguration>
+  <ProjectConfiguration Project="{21769432-61E2-4C89-9CCF-A0CC465BB8D6}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaHelper\LuaHelper.vcxproj" BuildProjectInSolution="False">Release|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\Lua\Lua.vcxproj" BuildProjectInSolution="False">Release|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{6A507DED-CB86-4B6B-97F8-352072F708CA}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender.DebugBootstrapper\HadesExtender.DebugBootstrapper.csproj" BuildProjectInSolution="True">Release|AnyCPU</ProjectConfiguration>
+  <ProjectConfiguration Project="{9BAA2B40-7D7B-444B-AB2B-4723CF87CBD8}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\cjson.vcxproj" BuildProjectInSolution="False">Release|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{D99ED05C-EDFC-493E-864A-62AFF0CEBD3F}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\lfs.vcxproj" BuildProjectInSolution="False">Release|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{128E8BD0-174A-48F0-8771-92B1E8D18713}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\mime.vcxproj" BuildProjectInSolution="False">Release|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{66E3CE14-884D-4AEA-9F20-15A0BEAF8C5A}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\socket.vcxproj" BuildProjectInSolution="False">Release|Win32</ProjectConfiguration>
+</SolutionConfiguration>
+      </Content>
+    </SolutionConfiguration>
+    <SolutionConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+      <Content>
+        <SolutionConfiguration xmlns="">
+  <ProjectConfiguration Project="{518C83DF-C74E-4AD3-8A14-B4EA9C636CF2}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender\HadesExtender.csproj" BuildProjectInSolution="True">Release|AnyCPU<ProjectDependency Project="{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}" /></ProjectConfiguration>
+  <ProjectConfiguration Project="{CCF692AC-723D-4E90-86C8-66CDD6FD4027}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender.Client\HadesExtender.Client.csproj" BuildProjectInSolution="True">Release|AnyCPU</ProjectConfiguration>
+  <ProjectConfiguration Project="{21769432-61E2-4C89-9CCF-A0CC465BB8D6}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaHelper\LuaHelper.vcxproj" BuildProjectInSolution="True">Release|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\Lua\Lua.vcxproj" BuildProjectInSolution="True">Release|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{6A507DED-CB86-4B6B-97F8-352072F708CA}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender.DebugBootstrapper\HadesExtender.DebugBootstrapper.csproj" BuildProjectInSolution="True">Release|AnyCPU</ProjectConfiguration>
+  <ProjectConfiguration Project="{9BAA2B40-7D7B-444B-AB2B-4723CF87CBD8}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\cjson.vcxproj" BuildProjectInSolution="True">Release|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{D99ED05C-EDFC-493E-864A-62AFF0CEBD3F}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\lfs.vcxproj" BuildProjectInSolution="True">Release|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{128E8BD0-174A-48F0-8771-92B1E8D18713}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\mime.vcxproj" BuildProjectInSolution="True">Release|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{66E3CE14-884D-4AEA-9F20-15A0BEAF8C5A}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\socket.vcxproj" BuildProjectInSolution="True">Release|x64</ProjectConfiguration>
+</SolutionConfiguration>
+      </Content>
+    </SolutionConfiguration>
+    <SolutionConfiguration Include="Release|x86">
+      <Configuration>Release</Configuration>
+      <Platform>x86</Platform>
+      <Content>
+        <SolutionConfiguration xmlns="">
+  <ProjectConfiguration Project="{518C83DF-C74E-4AD3-8A14-B4EA9C636CF2}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender\HadesExtender.csproj" BuildProjectInSolution="True">Release|AnyCPU<ProjectDependency Project="{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}" /></ProjectConfiguration>
+  <ProjectConfiguration Project="{CCF692AC-723D-4E90-86C8-66CDD6FD4027}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender.Client\HadesExtender.Client.csproj" BuildProjectInSolution="True">Release|AnyCPU</ProjectConfiguration>
+  <ProjectConfiguration Project="{21769432-61E2-4C89-9CCF-A0CC465BB8D6}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaHelper\LuaHelper.vcxproj" BuildProjectInSolution="True">Release|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\Lua\Lua.vcxproj" BuildProjectInSolution="True">Release|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{6A507DED-CB86-4B6B-97F8-352072F708CA}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender.DebugBootstrapper\HadesExtender.DebugBootstrapper.csproj" BuildProjectInSolution="True">Release|AnyCPU</ProjectConfiguration>
+  <ProjectConfiguration Project="{9BAA2B40-7D7B-444B-AB2B-4723CF87CBD8}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\cjson.vcxproj" BuildProjectInSolution="True">Release|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{D99ED05C-EDFC-493E-864A-62AFF0CEBD3F}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\lfs.vcxproj" BuildProjectInSolution="True">Release|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{128E8BD0-174A-48F0-8771-92B1E8D18713}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\mime.vcxproj" BuildProjectInSolution="True">Release|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{66E3CE14-884D-4AEA-9F20-15A0BEAF8C5A}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\socket.vcxproj" BuildProjectInSolution="True">Release|Win32</ProjectConfiguration>
+</SolutionConfiguration>
+      </Content>
+    </SolutionConfiguration>
+  </ItemGroup>
+  <PropertyGroup Condition=" ('$(Configuration)' == 'Debug') and ('$(Platform)' == 'x64') ">
+    <CurrentSolutionConfigurationContents>
+      <SolutionConfiguration xmlns="">
+  <ProjectConfiguration Project="{518C83DF-C74E-4AD3-8A14-B4EA9C636CF2}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender\HadesExtender.csproj" BuildProjectInSolution="True">Debug|AnyCPU<ProjectDependency Project="{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}" /></ProjectConfiguration>
+  <ProjectConfiguration Project="{CCF692AC-723D-4E90-86C8-66CDD6FD4027}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender.Client\HadesExtender.Client.csproj" BuildProjectInSolution="True">Debug|AnyCPU</ProjectConfiguration>
+  <ProjectConfiguration Project="{21769432-61E2-4C89-9CCF-A0CC465BB8D6}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaHelper\LuaHelper.vcxproj" BuildProjectInSolution="True">Debug|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\Lua\Lua.vcxproj" BuildProjectInSolution="True">Debug|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{6A507DED-CB86-4B6B-97F8-352072F708CA}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender.DebugBootstrapper\HadesExtender.DebugBootstrapper.csproj" BuildProjectInSolution="True">Debug|AnyCPU</ProjectConfiguration>
+  <ProjectConfiguration Project="{9BAA2B40-7D7B-444B-AB2B-4723CF87CBD8}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\cjson.vcxproj" BuildProjectInSolution="True">Debug|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{D99ED05C-EDFC-493E-864A-62AFF0CEBD3F}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\lfs.vcxproj" BuildProjectInSolution="True">Debug|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{128E8BD0-174A-48F0-8771-92B1E8D18713}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\mime.vcxproj" BuildProjectInSolution="True">Debug|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{66E3CE14-884D-4AEA-9F20-15A0BEAF8C5A}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\socket.vcxproj" BuildProjectInSolution="True">Debug|x64</ProjectConfiguration>
+</SolutionConfiguration>
+    </CurrentSolutionConfigurationContents>
+  </PropertyGroup>
+  <PropertyGroup Condition=" ('$(Configuration)' == 'Debug') and ('$(Platform)' == 'x86') ">
+    <CurrentSolutionConfigurationContents>
+      <SolutionConfiguration xmlns="">
+  <ProjectConfiguration Project="{518C83DF-C74E-4AD3-8A14-B4EA9C636CF2}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender\HadesExtender.csproj" BuildProjectInSolution="True">Debug|AnyCPU<ProjectDependency Project="{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}" /></ProjectConfiguration>
+  <ProjectConfiguration Project="{CCF692AC-723D-4E90-86C8-66CDD6FD4027}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender.Client\HadesExtender.Client.csproj" BuildProjectInSolution="True">Debug|AnyCPU</ProjectConfiguration>
+  <ProjectConfiguration Project="{21769432-61E2-4C89-9CCF-A0CC465BB8D6}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaHelper\LuaHelper.vcxproj" BuildProjectInSolution="True">Debug|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\Lua\Lua.vcxproj" BuildProjectInSolution="True">Debug|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{6A507DED-CB86-4B6B-97F8-352072F708CA}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender.DebugBootstrapper\HadesExtender.DebugBootstrapper.csproj" BuildProjectInSolution="True">Debug|AnyCPU</ProjectConfiguration>
+  <ProjectConfiguration Project="{9BAA2B40-7D7B-444B-AB2B-4723CF87CBD8}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\cjson.vcxproj" BuildProjectInSolution="True">Debug|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{D99ED05C-EDFC-493E-864A-62AFF0CEBD3F}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\lfs.vcxproj" BuildProjectInSolution="True">Debug|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{128E8BD0-174A-48F0-8771-92B1E8D18713}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\mime.vcxproj" BuildProjectInSolution="True">Debug|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{66E3CE14-884D-4AEA-9F20-15A0BEAF8C5A}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\socket.vcxproj" BuildProjectInSolution="True">Debug|Win32</ProjectConfiguration>
+</SolutionConfiguration>
+    </CurrentSolutionConfigurationContents>
+  </PropertyGroup>
+  <PropertyGroup Condition=" ('$(Configuration)' == 'Release') and ('$(Platform)' == 'Any CPU') ">
+    <CurrentSolutionConfigurationContents>
+      <SolutionConfiguration xmlns="">
+  <ProjectConfiguration Project="{518C83DF-C74E-4AD3-8A14-B4EA9C636CF2}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender\HadesExtender.csproj" BuildProjectInSolution="True">Release|AnyCPU</ProjectConfiguration>
+  <ProjectConfiguration Project="{CCF692AC-723D-4E90-86C8-66CDD6FD4027}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender.Client\HadesExtender.Client.csproj" BuildProjectInSolution="True">Release|AnyCPU</ProjectConfiguration>
+  <ProjectConfiguration Project="{21769432-61E2-4C89-9CCF-A0CC465BB8D6}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaHelper\LuaHelper.vcxproj" BuildProjectInSolution="False">Release|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\Lua\Lua.vcxproj" BuildProjectInSolution="False">Release|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{6A507DED-CB86-4B6B-97F8-352072F708CA}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender.DebugBootstrapper\HadesExtender.DebugBootstrapper.csproj" BuildProjectInSolution="True">Release|AnyCPU</ProjectConfiguration>
+  <ProjectConfiguration Project="{9BAA2B40-7D7B-444B-AB2B-4723CF87CBD8}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\cjson.vcxproj" BuildProjectInSolution="False">Release|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{D99ED05C-EDFC-493E-864A-62AFF0CEBD3F}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\lfs.vcxproj" BuildProjectInSolution="False">Release|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{128E8BD0-174A-48F0-8771-92B1E8D18713}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\mime.vcxproj" BuildProjectInSolution="False">Release|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{66E3CE14-884D-4AEA-9F20-15A0BEAF8C5A}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\socket.vcxproj" BuildProjectInSolution="False">Release|Win32</ProjectConfiguration>
+</SolutionConfiguration>
+    </CurrentSolutionConfigurationContents>
+  </PropertyGroup>
+  <PropertyGroup Condition=" ('$(Configuration)' == 'Release') and ('$(Platform)' == 'x64') ">
+    <CurrentSolutionConfigurationContents>
+      <SolutionConfiguration xmlns="">
+  <ProjectConfiguration Project="{518C83DF-C74E-4AD3-8A14-B4EA9C636CF2}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender\HadesExtender.csproj" BuildProjectInSolution="True">Release|AnyCPU<ProjectDependency Project="{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}" /></ProjectConfiguration>
+  <ProjectConfiguration Project="{CCF692AC-723D-4E90-86C8-66CDD6FD4027}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender.Client\HadesExtender.Client.csproj" BuildProjectInSolution="True">Release|AnyCPU</ProjectConfiguration>
+  <ProjectConfiguration Project="{21769432-61E2-4C89-9CCF-A0CC465BB8D6}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaHelper\LuaHelper.vcxproj" BuildProjectInSolution="True">Release|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\Lua\Lua.vcxproj" BuildProjectInSolution="True">Release|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{6A507DED-CB86-4B6B-97F8-352072F708CA}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender.DebugBootstrapper\HadesExtender.DebugBootstrapper.csproj" BuildProjectInSolution="True">Release|AnyCPU</ProjectConfiguration>
+  <ProjectConfiguration Project="{9BAA2B40-7D7B-444B-AB2B-4723CF87CBD8}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\cjson.vcxproj" BuildProjectInSolution="True">Release|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{D99ED05C-EDFC-493E-864A-62AFF0CEBD3F}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\lfs.vcxproj" BuildProjectInSolution="True">Release|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{128E8BD0-174A-48F0-8771-92B1E8D18713}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\mime.vcxproj" BuildProjectInSolution="True">Release|x64</ProjectConfiguration>
+  <ProjectConfiguration Project="{66E3CE14-884D-4AEA-9F20-15A0BEAF8C5A}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\socket.vcxproj" BuildProjectInSolution="True">Release|x64</ProjectConfiguration>
+</SolutionConfiguration>
+    </CurrentSolutionConfigurationContents>
+  </PropertyGroup>
+  <PropertyGroup Condition=" ('$(Configuration)' == 'Release') and ('$(Platform)' == 'x86') ">
+    <CurrentSolutionConfigurationContents>
+      <SolutionConfiguration xmlns="">
+  <ProjectConfiguration Project="{518C83DF-C74E-4AD3-8A14-B4EA9C636CF2}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender\HadesExtender.csproj" BuildProjectInSolution="True">Release|AnyCPU<ProjectDependency Project="{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}" /></ProjectConfiguration>
+  <ProjectConfiguration Project="{CCF692AC-723D-4E90-86C8-66CDD6FD4027}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender.Client\HadesExtender.Client.csproj" BuildProjectInSolution="True">Release|AnyCPU</ProjectConfiguration>
+  <ProjectConfiguration Project="{21769432-61E2-4C89-9CCF-A0CC465BB8D6}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaHelper\LuaHelper.vcxproj" BuildProjectInSolution="True">Release|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{B7C511A9-1F7B-4F4E-8DDA-C0D7F0E61C85}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\Lua\Lua.vcxproj" BuildProjectInSolution="True">Release|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{6A507DED-CB86-4B6B-97F8-352072F708CA}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\HadesExtender.DebugBootstrapper\HadesExtender.DebugBootstrapper.csproj" BuildProjectInSolution="True">Release|AnyCPU</ProjectConfiguration>
+  <ProjectConfiguration Project="{9BAA2B40-7D7B-444B-AB2B-4723CF87CBD8}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\cjson.vcxproj" BuildProjectInSolution="True">Release|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{D99ED05C-EDFC-493E-864A-62AFF0CEBD3F}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\lfs.vcxproj" BuildProjectInSolution="True">Release|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{128E8BD0-174A-48F0-8771-92B1E8D18713}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\mime.vcxproj" BuildProjectInSolution="True">Release|Win32</ProjectConfiguration>
+  <ProjectConfiguration Project="{66E3CE14-884D-4AEA-9F20-15A0BEAF8C5A}" AbsolutePath="C:\Files\Code\Hades\HadesExtenderCSharp\LuaModules\socket.vcxproj" BuildProjectInSolution="True">Release|Win32</ProjectConfiguration>
+</SolutionConfiguration>
+    </CurrentSolutionConfigurationContents>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\SolutionFile\ImportAfter\*" Condition="'$(ImportByWildcardBeforeSolution)' != 'false' and exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\SolutionFile\ImportAfter')" />
+  <PropertyGroup Condition="'$(ImportDirectorySolutionTargets)' != 'false' and '$(DirectorySolutionTargetsPath)' == ''">
+    <_DirectorySolutionTargetsFile Condition="'$(_DirectorySolutionTargetsFile)' == ''">Directory.Solution.targets</_DirectorySolutionTargetsFile>
+    <_DirectorySolutionTargetsBasePath Condition="'$(_DirectorySolutionTargetsBasePath)' == ''">$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), '$(_DirectorySolutionTargetsFile)'))</_DirectorySolutionTargetsBasePath>
+    <DirectorySolutionTargetsPath Condition="'$(_DirectorySolutionTargetsBasePath)' != '' and '$(_DirectorySolutionTargetsFile)' != ''">$([System.IO.Path]::Combine('$(_DirectorySolutionTargetsBasePath)', '$(_DirectorySolutionTargetsFile)'))</DirectorySolutionTargetsPath>
+  </PropertyGroup>
+  <Import Project="$(DirectorySolutionTargetsPath)" Condition="'$(ImportDirectorySolutionTargets)' != 'false' and exists('$(DirectorySolutionTargetsPath)')" />
+  <Import Project="C:\Files\Code\Hades\HadesExtenderCSharp\after.HadesExtender.sln.targets" Condition="exists('C:\Files\Code\Hades\HadesExtenderCSharp\after.HadesExtender.sln.targets')" />
+</Project>
