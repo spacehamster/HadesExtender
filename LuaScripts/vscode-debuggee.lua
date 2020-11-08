@@ -335,7 +335,9 @@ local function createPureBreaker()
 		if cached then
 			return cached
 		end
-
+		if string.sub(chunkname, 1, 1) ~= '@' then
+			chunkname = resolveChunkPath(chunkname)
+		end
 		local splitedReqPath = splitChunkName(chunkname)
 		local maxMatchCount = 0
 		local foundPath = nil
@@ -784,18 +786,19 @@ function handlers.stackTrace(req)
 			firstFrame = firstFrame + 1
 		end
 	end
-	print("StackTrace")
+
 	for i = firstFrame, lastFrame do
 		local info = debug_getinfo(i, 'lnS')
 		if (info == nil) then break end
-		print(json.encode(info))
+		--print(json.encode(info))
+
 		local src = info.source
 		if string.sub(src, 1, 1) == '@' then
 			src = string.sub(src, 2) -- 앞의 '@' 떼어내기
 		else
 			src = resolveChunkPath(src)
 		end
-		
+
 		local name
 		if info.name then
 			name = info.name .. ' (' .. (info.namewhat or '?') .. ')'

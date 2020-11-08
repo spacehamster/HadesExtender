@@ -6,7 +6,7 @@ function ResolveChunkPath(fileName)
 end
 
 local startResult, breakerType = debuggee.start(json, { resolveChunkPath = ResolveChunkPath })
-
+print('debuggee start ->', startResult, breakerType)
 
 function OnExtenderDebugUpdate()
 	debuggee.poll()

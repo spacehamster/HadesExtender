@@ -16,6 +16,10 @@ namespace HadesExtender
     {
         //TODO: Make config
         const bool CustomLuaRuntime = true;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        delegate int DBSetHookDelegate(LuaState L);
+        DBSetHookDelegate db_sethook;
+
         SymbolResolver Resolver;
         public Lua lua;
         delegate void LuaFunc(LuaState L);
@@ -54,6 +58,12 @@ namespace HadesExtender
             } else
             {
                 customRuntime.OpenLibraries(State);
+                //Restore debug.sethook function, engine stubs it at runtime.
+                var top = LuaBindings.lua_gettop(State);
+                LuaBindings.lua_getglobal(State, "debug");
+                LuaBindings.lua_pushcclosure(State, customRuntime.db_sethook, 0);
+                LuaBindings.lua_setfield(State, -2, "sethook");
+                LuaBindings.lua_settop(State, top);
             }
 
             Console.WriteLine("Loading debug scripts");
@@ -69,6 +79,10 @@ namespace HadesExtender
                 lua.LoadFile($"{Util.ExtenderDirectory}/InitDebugging.lua");
             }
             debugEnabled = true;
+        }
+        void SetHook()
+        {
+
         }
         public void TestLog(LuaState L)
         {
