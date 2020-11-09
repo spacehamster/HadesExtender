@@ -18,7 +18,7 @@
     </ItemGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-      <Exec Command="cd $(TargetDir)&#xD;&#xA;$(SolutionDir)BuildAndCopyLibs.bat $(Configuration)" />
+      <Exec Command="cd $(TargetDir)&#xD;&#xA;set PATH=$(MSBuildBinPath);%25PATH%25&#xD;&#xA;$(SolutionDir)BuildAndCopyLibs.bat $(Configuration)" />
     </Target>
   
 </Project>

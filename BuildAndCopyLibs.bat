@@ -15,7 +15,7 @@ if "%~1" == "" (
 )
 echo Building and copying libs for %Config% config
 
-msbuild %SolutionDir%\HadesExtender.sln /t:Lua;LuaHelper;LuaModules\cjson;LuaModules\lfs;LuaModules\mime;LuaModules\socket /p:Platform="x64" /p:Configuration=%Config%
+msbuild %SolutionDir%\HadesExtender.sln /t:Lua;LuaHelper;LuaModules\cjson;LuaModules\lfs;LuaModules\mime;LuaModules\socket /p:Platform="x64" /p:Configuration=%Config% -m
 
 call :copyFile %Bin%\Lua.dll Lua.dll || GOTO :error
 call :copyFile %Bin%\LuaHelper.dll LuaHelper.dll || GOTO :error

@@ -89,6 +89,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>cd $(TargetDir)
+set PATH=$(MSBuildBinPath);%25PATH%25
 $(SolutionDir)BuildAndCopyLibs.bat $(Configuration)</PostBuildEvent>
   </PropertyGroup>
 </Project>
