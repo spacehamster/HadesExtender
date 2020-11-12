@@ -55,16 +55,6 @@ coroutine.create = function(f)
 	return c
 end
 
-local coroutineParents = {}
-
-local coresume = coroutine.resume
-coroutine.resume = function(co, ...)
-	coroutineParents[co] = coroutine.running()
-	local result = coresume(co, ...)
-	coroutineParents[co] = nil
-	return result
-end
-
 -------------------------------------------------------------------------------
 local function debug_getinfo(depth, what)
 	if debugTargetCo then
@@ -999,26 +989,8 @@ end
 
 -------------------------------------------------------------------------------
 local stepTargetHeight = nil
-local stepTargetThread = nil
-
-local function shouldBreak()
-	if stepTargetHeight == nil or stepTargetThread == nil then
-		return true
-	end
-	local currentThread = coroutine.running()
-	if coroutineParents[stepTargetThread] == currentThread then
-		stepTargetThread = currentThread
-		stepTargetHeight = stackHeight() - 2
-		return false
-	end
-	if stackHeight() - 1 <= stepTargetHeight and currentThread == stepTargetThread then
-		return true
-	end
-	return false
-end
-
 local function step()
-	if shouldBreak() then
+	if (stepTargetHeight == nil) or (stackHeight() <= stepTargetHeight) then
 		breaker.setLineBreak(nil)
 		baseDepth = breaker.stackOffset.stepDebugLoop
 		startDebugLoop()
@@ -1028,7 +1000,6 @@ end
 -------------------------------------------------------------------------------
 function handlers.next(req)
 	stepTargetHeight = stackHeight() - breaker.stackOffset.step
-	stepTargetThread = coroutine.running()
 	breaker.setLineBreak(step)
 	sendSuccess(req, {})
 	return 'CONTINUE'
@@ -1037,7 +1008,6 @@ end
 -------------------------------------------------------------------------------
 function handlers.stepIn(req)
 	stepTargetHeight = nil
-	stepTargetThread = nil
 	breaker.setLineBreak(step)
 	sendSuccess(req, {})
 	return 'CONTINUE'
@@ -1046,7 +1016,6 @@ end
 -------------------------------------------------------------------------------
 function handlers.stepOut(req)
 	stepTargetHeight = stackHeight() - (breaker.stackOffset.step + 1)
-	stepTargetThread = coroutine.running()
 	breaker.setLineBreak(step)
 	sendSuccess(req, {})
 	return 'CONTINUE'
