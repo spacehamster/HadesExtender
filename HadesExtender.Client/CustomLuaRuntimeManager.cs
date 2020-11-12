@@ -44,7 +44,6 @@ namespace HadesExtender
             db_sethook = luaResolver.Resolve("db_sethook");
 
             using var sw = new StreamWriter("PatchLog.txt");
-            var useEasyhook = false;
             /* do not hook luaL_openlibs so that the engine will load its own implementation of 
              * luaopen_debug and luaopen_utf8 
              */
@@ -65,30 +64,13 @@ namespace HadesExtender
                     sw.WriteLine($"Could not find symbol {symbol} in lua.dll");
                     continue;
                 }
-                if (useEasyhook)
-                {
-                    try
-                    {
-                        var hook = LocalHook.CreateUnmanaged(source, target, IntPtr.Zero);
-                        hook.ThreadACL.SetExclusiveACL(Array.Empty<int>());
-                        luahooks[symbol] = hook;
-                        sw.WriteLine($"hooked lua function {symbol}");
-                    }
-                    catch (NotSupportedException ex)
-                    {
-                        sw.WriteLine($"Could not hook {symbol} - {ex.Message}");
-                    }
-                }
-                else
-                {
-                    var asm = new string[] {
+                var asm = new string[] {
                         $"use64",
                         Utilities.GetAbsoluteJumpMnemonics(target, is64bit:true)
                     };
-                    var hook = new AsmHook(asm, source.ToInt64(), AsmHookBehaviour.DoNotExecuteOriginal).Activate();
-                    luahooks[symbol] = hook;
-                    sw.WriteLine($"hooked lua function {symbol}. 0x{source.ToInt64():X8} -> 0x{target.ToInt64():X8}");
-                }
+                var hook = new AsmHook(asm, source.ToInt64(), AsmHookBehaviour.DoNotExecuteOriginal).Activate();
+                luahooks[symbol] = hook;
+                sw.WriteLine($"hooked lua function {symbol}. 0x{source.ToInt64():X8} -> 0x{target.ToInt64():X8}");
             }
         }
 
