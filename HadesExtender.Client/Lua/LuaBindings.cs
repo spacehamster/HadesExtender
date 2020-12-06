@@ -500,11 +500,6 @@ namespace HadesExtender
         public static LuaLCheckUnsignedDelegate luaL_checkunsigned = null;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public unsafe delegate void LuaLCheckVersionDelegate(LuaState L);
-        [PdbSymbol]
-        public static LuaLCheckVersionDelegate luaL_checkversion_ = null;
-
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public unsafe delegate int LuaLErrorDelegate(LuaState L, [MarshalAs(UnmanagedType.LPStr)] string fmt, IntPtr vargs);
         [PdbSymbol]
         public static LuaLErrorDelegate luaL_error = null;

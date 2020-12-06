@@ -6,6 +6,8 @@ using EasyHook;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace HadesExtender
 {
@@ -76,6 +78,9 @@ namespace HadesExtender
                 }
                 module = GetEngineModule();
                 resolver = new DiaSymbolResolver(module);
+#if DEBUG
+                LogEngineSymbols(resolver);
+#endif
                 PdbSymbolImporter.ImportSymbols(resolver);
                 LuaHelper.InitHelper(resolver);
 
@@ -99,6 +104,21 @@ namespace HadesExtender
                 Console.Error.WriteLine(ex);
                 throw;
             }
+        }
+        void LogEngineSymbols(SymbolResolver engineResolver)
+        {
+            var engineSymbols = engineResolver.FindSymbolsMatching(new Regex("lua*"));
+            File.WriteAllLines("engine_symbols.txt", engineSymbols);
+
+            Util.LoadExtenderLibrary("LuaHelper.dll");
+            var helperModule = Util.GetModule("LuaHelper.dll");
+            var helperResolver = new ExportResolver(helperModule);
+
+            var symbols = helperResolver.FindSymbolsMatching(new Regex("lua*"));
+            var missingSymbols = symbols.
+                Where(name => !engineResolver.TryResolve(name, out var _));
+
+            File.WriteAllLines("missing_symbols.txt", missingSymbols);
         }
         //Add hooks to dictionary to prevent them being GC'd
         Dictionary<string, LocalHook> Hooks = new Dictionary<string, LocalHook>();
