@@ -21,4 +21,4 @@ To debug hades:
 }
 ```
 * Run the debugger named 'attach-hades' in vscode.
-* Launch hades using HadesExtender
+* Launch hades using HadesExtender in debug mode with the command `HadesExtender.exe -d`

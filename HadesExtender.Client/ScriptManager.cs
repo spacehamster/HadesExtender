@@ -20,6 +20,8 @@ namespace HadesExtender
         delegate int DBSetHookDelegate(LuaState L);
         DBSetHookDelegate db_sethook;
 
+
+
         SymbolResolver Resolver;
         public Lua lua;
         delegate void LuaFunc(LuaState L);
@@ -29,9 +31,10 @@ namespace HadesExtender
         IntPtr l_msghandler;
         IntPtr l_panic;
         CustomLuaRuntimeManager customRuntime;
-        bool debugEnabled;
-        public ScriptManager(SymbolResolver resolver)
+        bool DebugEnabled;
+        public ScriptManager(SymbolResolver resolver, bool enableDebug)
         {
+            DebugEnabled = enableDebug;
             Console.WriteLine("Initializing ScriptManager");
             Resolver = resolver;
             luaInterface = resolver.Resolve<LuaInterface>("?LUA_INTERFACE@ScriptManager@sgg@@2ULua@@A");
@@ -48,13 +51,16 @@ namespace HadesExtender
 
         public void Init()
         {
+
             Console.WriteLine("Registered TestLog function");
             lua.RegisterFunction<LuaFunc>("TestLog", TestLog);
             Console.WriteLine("Registered TesValue global");
             lua.SetGlobal("TestValue", (double)5);
             if (!CustomLuaRuntime)
             {
+#pragma warning disable CS0162 // Unreachable code detected
                 LuaHelper.OpenLibraries(State);
+#pragma warning restore CS0162 // Unreachable code detected
             } else
             {
                 customRuntime.OpenLibraries(State);
@@ -65,20 +71,34 @@ namespace HadesExtender
                 LuaBindings.lua_setfield(State, -2, "sethook");
                 LuaBindings.lua_settop(State, top);
             }
-
-            Console.WriteLine("Loading debug scripts");
-            var luadir = Path.Combine(Util.ExtenderDirectory, "lua_modules");
-            lua.Eval(string.Format(@"package.path = package.path .. "";{0}""",
-                $@"{Util.ExtenderDirectory}\?.lua".Replace(@"\", @"\\")));
-            lua.Eval(string.Format(@"package.path = package.path .. "";{0}""",
-                $@"{luadir}\share\lua\5.2\?.lua".Replace(@"\", @"\\")));
-            lua.Eval(string.Format(@"package.cpath = package.cpath .. "";{0}""",
-                $@"{luadir}\lib\lua\5.2\?.dll".Replace(@"\", @"\\")));
-            if (File.Exists($"{Util.ExtenderDirectory}/InitDebugging.lua"))
+            if (DebugEnabled)
             {
-                lua.LoadFile($"{Util.ExtenderDirectory}/InitDebugging.lua");
+                Console.WriteLine("Loading debug scripts");
+                var luadir = Path.Combine(Util.ExtenderDirectory, "lua_modules");
+                lua.Eval(string.Format(@"package.path = package.path .. "";{0}""",
+                    $@"{Util.ExtenderDirectory}\?.lua".Replace(@"\", @"\\")));
+                lua.Eval(string.Format(@"package.path = package.path .. "";{0}""",
+                    $@"{luadir}\share\lua\5.2\?.lua".Replace(@"\", @"\\")));
+                lua.Eval(string.Format(@"package.cpath = package.cpath .. "";{0}""",
+                    $@"{luadir}\lib\lua\5.2\?.dll".Replace(@"\", @"\\")));
+                if (File.Exists($"{Util.ExtenderDirectory}/InitDebugging.lua"))
+                {
+                    lua.LoadFile($"{Util.ExtenderDirectory}/InitDebugging.lua");
+                }
             }
-            debugEnabled = true;
+
+            RegisterLoadBanks();
+        }
+        void RegisterLoadBanks()
+        {
+            lua.RegisterFunction<LuaFunc>("LoadBank", LoadBank);
+        }
+        static void LoadBank(LuaState L)
+        {
+            int nargs = LuaBindings.lua_gettop(L);
+            var path = LuaBindings.luaL_tolstring(L, 1, IntPtr.Zero);
+            var value = LuaBindings.lua_toboolean(L, 2) != 0;
+            ExtenderAudioManager.LoadBank(path, value);
         }
         void SetHook()
         {
@@ -108,7 +128,7 @@ namespace HadesExtender
 
         public void Update()
         {
-            if (debugEnabled)
+            if (DebugEnabled)
             {
                 var top = LuaBindings.lua_gettop(State);
                 LuaBindings.lua_getglobal(State, "OnExtenderDebugUpdate");

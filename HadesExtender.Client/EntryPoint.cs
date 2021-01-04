@@ -51,9 +51,14 @@ namespace HadesExtender
             try
             {
                 var args = Environment.GetCommandLineArgs();
+                bool enableDebug = false;
                 foreach(var arg in args)
                 {
                     if(arg == "--launch-debugger")
+                    {
+                        Debugger.Launch();
+                    }
+                    if (arg == "-d" || arg == "--enable-debug")
                     {
                         Debugger.Launch();
                     }
@@ -87,7 +92,7 @@ namespace HadesExtender
                 Hook<InitLuaDelegate>("?InitLua@ScriptManager@sgg@@SAXXZ", InitLua);
                 Hook<ScriptManagerUpdateDelegate>("?Update@ScriptManager@sgg@@SAXAEBM@Z", ScriptManagerUpdate);
 
-                scriptManager = new ScriptManager(resolver);
+                scriptManager = new ScriptManager(resolver, enableDebug);
                 Console.WriteLine($"Created ScriptManager");
                 RemoteHooking.WakeUpProcess();
 
