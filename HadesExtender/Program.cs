@@ -14,7 +14,11 @@ namespace HadesExtender
         {
             if (args.Length == 0)
                 args = new[] { @"C:\Program Files (x86)\Steam\steamapps\common\Hades\x64\Hades.exe" };
-
+            if (!File.Exists(args[0]))
+            {
+                Console.WriteLine(@"Cannot locate Hades executable, please run with 'HadesExtender.exe <HadesDirectory>\x64\Hades.exe'");
+                return;
+            }
             RemoteHooking.CreateAndInject(args[0],
                 "",
                 InProcessCreationFlags: 0,
